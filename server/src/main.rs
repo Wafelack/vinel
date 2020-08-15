@@ -1,19 +1,36 @@
 use std::net::UdpSocket;
 use std::str;
 
+mod commands;
+use commands::{match_command, run_command, CommandList};
+
 #[allow(unused_variables)]
+#[allow(unused_assignments)]
 fn main() {
-    let socket = UdpSocket::bind("127.0.0.1:60000").expect("");
-    let mut buf = [0; 1000];
+    let localaddr: &str = "127.0.0.1:31499";
+    let socket = UdpSocket::bind(localaddr).expect("");
+    println!("Listening on {}...", localaddr);
+
+    let command_received = "";
 
     loop {
-        let (number_of_bytes, src_addr) = socket.recv_from(&mut buf).expect("");
+        let mut buf = [0; 1000];
+        let command_splited: Vec<&str>;
 
-        let data_recv = &mut buf[..number_of_bytes];
-        let command_received = match str::from_utf8(data_recv) {
+        let (number_of_bytes, src_addr) = socket.recv_from(&mut buf).expect("");
+        let data_recv: &[u8] = &mut buf[..number_of_bytes];
+        let command_received: &str = match str::from_utf8(data_recv) {
             Ok(v) => v,
             Err(e) => panic!("Invalid utf8 seq : {}", e),
         };
-        println!("{}", command_received);
+        println!("{} -> {}", src_addr.to_string(), command_received); // DEBUG
+        let retmatch = match match_command(command_received) {
+            CommandList::Error(e) => panic!("{}", e),
+            _ => match_command(command_received),
+        };
+        match run_command(retmatch) {
+            Ok(_) => (),
+            Err(e) => println!("{}", e),
+        }
     }
 }
