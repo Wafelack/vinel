@@ -27,17 +27,9 @@ fn main() {
             _ => match_command(command_received),
         };
 
-        let cmd = match retmatch.clone() {
-            CommandList::Exec(st) => CommandList::Exec(st),
-            CommandList::Kill => CommandList::Kill,
-            CommandList::Error(e) => CommandList::Error(e),
-        };
+        let cmd = retmatch.clone();
 
-        let cmd2 = match retmatch.clone() {
-            CommandList::Exec(st) => CommandList::Exec(st),
-            CommandList::Kill => CommandList::Kill,
-            CommandList::Error(m) => CommandList::Error(m),
-        };
+        let cmd2 = retmatch.clone();
 
         match run_command(cmd2).len() {
             0 => (),
