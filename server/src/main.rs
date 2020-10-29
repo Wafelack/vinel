@@ -9,7 +9,6 @@ use commands::{match_command, run_command, CommandList};
 fn main() {
     let localaddr: &str = "127.0.0.1:31499";
     let socket = UdpSocket::bind(localaddr).expect("");
-    println!("Listening on {}...", localaddr);
 
     let command_received = "";
 
