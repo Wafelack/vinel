@@ -1,9 +1,9 @@
-# RAT
+# Remote Access Tool
 
-Very very basic RAT written in Rust to practice sockets
+Remote Access tool written in Rust.
 
-## Commands available
+## Usage :
 
-Display : Display a message on the target machine<br>
-mkdir : Creates a directory on the target machine<br>
-touch : Creates a file on the target machine<br>
+- `exec <command>` will execute the command on the target machine and display the output
+- `exit` will kill the client **without** shutting down the server
+- `kill` will shutdown the client and the server

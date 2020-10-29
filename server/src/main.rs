@@ -23,14 +23,30 @@ fn main() {
             Ok(v) => v,
             Err(e) => panic!("Invalid utf8 seq : {}", e),
         };
-        println!("{} -> {}", src_addr.to_string(), command_received); // DEBUG
         let retmatch = match match_command(command_received) {
             CommandList::Error(e) => panic!("{}", e),
             _ => match_command(command_received),
         };
-        match run_command(retmatch) {
-            Ok(_) => (),
-            Err(e) => println!("{}", e),
+
+        let cmd = match retmatch.clone() {
+            CommandList::Exec(st) => CommandList::Exec(st),
+            CommandList::Kill => CommandList::Kill,
+            CommandList::Error(e) => CommandList::Error(e),
+        };
+
+        let cmd2 = match retmatch.clone() {
+            CommandList::Exec(st) => CommandList::Exec(st),
+            CommandList::Kill => CommandList::Kill,
+            CommandList::Error(m) => CommandList::Error(m),
+        };
+
+        match run_command(cmd2).len() {
+            0 => (),
+            _ => {
+                socket
+                    .send_to(&run_command(cmd), src_addr)
+                    .expect("Failed to send output");
+            }
         }
     }
 }
