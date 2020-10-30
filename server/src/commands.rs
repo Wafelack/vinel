@@ -1,6 +1,3 @@
-use std::process::Command;
-
-#[derive(Clone)]
 pub enum CommandList {
     Exec(String),
     Error(String),
@@ -22,23 +19,5 @@ pub fn match_command(command: &str) -> CommandList {
         }
         "kill" => CommandList::Kill,
         &_ => return CommandList::Error(String::from("Not in commands")),
-    }
-}
-
-pub fn run_command(command: CommandList) -> Vec<u8> {
-    match command {
-        CommandList::Exec(command) => {
-            let output = Command::new("cmd")
-                .args(&["/C", &command])
-                .output()
-                .expect("failed to run command");
-            return output.stdout;
-        }
-        CommandList::Kill => {
-            std::process::exit(0);
-        }
-        CommandList::Error(_e) => {
-            std::process::exit(-1);
-        }
     }
 }
