@@ -8,7 +8,7 @@ use commands::{match_command, CommandList};
 #[allow(unused_variables)]
 #[allow(unused_assignments)]
 fn main() {
-    let localaddr: &str = "127.0.0.1:31499";
+    let localaddr: &str = "0.0.0.0:31499";
     let socket = UdpSocket::bind(localaddr).expect("");
 
     let command_received = "";
