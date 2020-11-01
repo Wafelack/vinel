@@ -1,3 +1,5 @@
 *.lock
 client/target/
 server/target/
+client/src/encrypt/*
+server/src/encrypt/*
