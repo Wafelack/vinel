@@ -2,6 +2,10 @@ use std::io::prelude::*;
 use std::io::{self, Write};
 use std::net::TcpStream;
 
+mod encrypt;
+
+use encrypt::encrypt::encrypt;
+
 fn main() {
     print!("Write the target IP>");
     io::stdout().flush().unwrap();
@@ -27,7 +31,7 @@ fn main() {
             break;
         }
         socket
-            .write(trimmed_cmd.as_bytes())
+            .write(encrypt(trimmed_cmd).as_bytes())
             .expect("Could not send command");
 
         let mut buf = [0; 1024];
