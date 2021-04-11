@@ -1,8 +1,58 @@
-use crate::{VLispResult, lexer::{Lexer, TType, Token}};
-
 #[cfg(test)]
 mod test {
-    use super::*;
+    use crate::{VLispResult, lexer::{Lexer, TType, Token}, parser::{Parser, Expr, ExprT}};
+
+    mod parser {
+        use super::*;
+        
+        fn types_from_expresssions(expressions: Vec<Expr>) -> Vec<ExprT> {
+            expressions.iter().map(|t| t.exprt.clone()).collect::<Vec<_>>()
+        }
+
+        #[test]
+        fn string() -> VLispResult<()> {
+            let tokens = Lexer::new(r#""Hello, World !""#).proc_tokens()?;
+            let expressions = types_from_expresssions(Parser::new(tokens).parse()?);
+            assert_eq!(expressions, vec![ExprT::String("Hello, World !".to_string())]);
+
+            Ok(())
+        }
+        
+        #[test]
+        fn number() -> VLispResult<()> {
+            let tokens = Lexer::new("55").proc_tokens()?;
+            let expressions = types_from_expresssions(Parser::new(tokens).parse()?);
+            assert_eq!(expressions, vec![ExprT::Number(55)]);
+
+            Ok(())
+        }
+
+        #[test]
+        fn float() -> VLispResult<()> {
+            let tokens = Lexer::new("3.1415").proc_tokens()?;
+            let expressions = types_from_expresssions(Parser::new(tokens).parse()?);
+            assert_eq!(expressions, vec![ExprT::Float(3.1415)]);
+
+            Ok(())
+        }
+        #[test]
+        fn symbol() -> VLispResult<()> {
+            let tokens = Lexer::new("'recursive").proc_tokens()?;
+            let expressions = types_from_expresssions(Parser::new(tokens).parse()?);
+            assert_eq!(expressions, vec![ExprT::Symbol("recursive".to_string())]);
+
+            Ok(())
+        }
+
+        #[test]
+        fn call() -> VLispResult<()> {
+            let tokens = Lexer::new("(call foo)").proc_tokens()?;
+            let expressions = types_from_expresssions(Parser::new(tokens).parse()?);
+            assert_eq!(expressions, vec![ExprT::Call("call".to_string(), vec!(Expr::new(ExprT::Var("foo".to_string()), 1, 9)))]);
+
+            Ok(())
+        }
+    }
 
     mod lexer {
         use super::*;
@@ -45,5 +95,14 @@ mod test {
             assert_eq!(ttypes, vec![TType::Ident("define".to_string())]);
             Ok(())
         }
+
+        #[test]
+        fn quote() -> VLispResult<()> {
+            let ttypes = types_from_tokens(Lexer::new("'").proc_tokens()?);
+            assert_eq!(ttypes, vec![TType::Quote]);
+            Ok(())
+        }
+
+
     }
 }

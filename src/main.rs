@@ -1,4 +1,5 @@
 mod lexer;
+mod parser;
 mod tests;
 
 use lexer::{Lexer, Token, TType};

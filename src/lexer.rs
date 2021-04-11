@@ -10,6 +10,20 @@ pub enum TType {
     LParen,
     RParen,
 }
+impl TType {
+    pub fn get_type(&self) -> String {
+        match self {
+            TType::String(_) => "String",
+            TType::Number(_) => "Number",
+            TType::Float(_) => "Float",
+            TType::Ident(_) => "Identifier",
+            TType::Quote => "Quote",
+            TType::LParen => "Opening Parenthese",
+            TType::RParen => "Closing Parenthese",
+        }.to_string()
+    }
+
+}
 
 #[derive(Clone, Debug)]
 pub struct Token {
@@ -17,7 +31,6 @@ pub struct Token {
     pub column: usize,
     pub line: usize,
 }
-
 impl Token {
     pub fn new(ttype: TType, line: usize, column: usize) -> Self {
         Self {
@@ -69,6 +82,11 @@ impl Lexer {
             '(' => self.add_token(TType::LParen),
             ')' => self.add_token(TType::RParen),
             '"' => self.string()?,
+            ' ' | '\t' | '\r' => {},
+            '\n' => {
+                self.line += 1;
+                self.column = 0;
+            }
             '\'' => self.add_token(TType::Quote),
             _ => if c.is_digit(10) {
                 self.number();
