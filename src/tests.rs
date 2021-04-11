@@ -1,23 +1,33 @@
 #[cfg(test)]
 mod test {
-    use crate::{VLispResult, lexer::{Lexer, TType, Token}, parser::{Parser, Expr, ExprT}};
+    use crate::{
+        lexer::{Lexer, TType, Token},
+        parser::{Expr, ExprT, Parser},
+        VLispResult,
+    };
 
     mod parser {
         use super::*;
-        
+
         fn types_from_expresssions(expressions: Vec<Expr>) -> Vec<ExprT> {
-            expressions.iter().map(|t| t.exprt.clone()).collect::<Vec<_>>()
+            expressions
+                .iter()
+                .map(|t| t.exprt.clone())
+                .collect::<Vec<_>>()
         }
 
         #[test]
         fn string() -> VLispResult<()> {
             let tokens = Lexer::new(r#""Hello, World !""#).proc_tokens()?;
             let expressions = types_from_expresssions(Parser::new(tokens).parse()?);
-            assert_eq!(expressions, vec![ExprT::String("Hello, World !".to_string())]);
+            assert_eq!(
+                expressions,
+                vec![ExprT::String("Hello, World !".to_string())]
+            );
 
             Ok(())
         }
-        
+
         #[test]
         fn number() -> VLispResult<()> {
             let tokens = Lexer::new("55").proc_tokens()?;
@@ -48,7 +58,13 @@ mod test {
         fn call() -> VLispResult<()> {
             let tokens = Lexer::new("(call foo)").proc_tokens()?;
             let expressions = types_from_expresssions(Parser::new(tokens).parse()?);
-            assert_eq!(expressions, vec![ExprT::Call("call".to_string(), vec!(Expr::new(ExprT::Var("foo".to_string()), 1, 9)))]);
+            assert_eq!(
+                expressions,
+                vec![ExprT::Call(
+                    "call".to_string(),
+                    vec!(Expr::new(ExprT::Var("foo".to_string()), 1, 9))
+                )]
+            );
 
             Ok(())
         }
@@ -102,7 +118,5 @@ mod test {
             assert_eq!(ttypes, vec![TType::Quote]);
             Ok(())
         }
-
-
     }
 }

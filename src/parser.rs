@@ -1,7 +1,7 @@
-use crate::{Token, TType, VLispResult};
+use crate::{TType, Token, VLispResult};
 use std::mem::discriminant;
 
-#[derive(Clone,Debug,  PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum ExprT {
     String(String),
     Number(i32),
@@ -41,19 +41,19 @@ impl Parser {
         }
     }
     fn is_at_end(&self) -> bool {
-        self.current >= self.input.len() 
+        self.current >= self.input.len()
     }
     fn advance(&mut self, expected: TType) -> Result<Token, String> {
         let popped = self.pop()?;
 
         if discriminant(&popped.ttype) != discriminant(&expected) {
             Err(format!(
-                    "{}:{} | Expected token of type {}, found one of type {}.",
-                    popped.line,
-                    popped.column,
-                    expected.get_type(),
-                    popped.ttype.get_type()
-                    ))
+                "{}:{} | Expected token of type {}, found one of type {}.",
+                popped.line,
+                popped.column,
+                expected.get_type(),
+                popped.ttype.get_type()
+            ))
         } else {
             Ok(popped)
         }
@@ -62,9 +62,9 @@ impl Parser {
         if self.is_at_end() {
             let previous = &self.input[self.current];
             Err(format!(
-                    "{}:{} | Unexpected EOF while parsing expression.",
-                    previous.line, previous.column
-                    ))
+                "{}:{} | Unexpected EOF while parsing expression.",
+                previous.line, previous.column
+            ))
         } else {
             if self.input.len() != 1 {
                 self.current += 1;
@@ -94,7 +94,6 @@ impl Parser {
             if self.input.len() == 1 {
                 break;
             }
-
         }
 
         if errors.is_empty() {
@@ -119,8 +118,6 @@ impl Parser {
                 } else {
                     panic!("Bug: UNEXPECTED_NON_IDENTIFIER");
                 };
-                
-
                 Expr::new(ExprT::Symbol(symbol), token.line, token.column)
             }
             TType::LParen => {

@@ -2,7 +2,7 @@ mod lexer;
 mod parser;
 mod tests;
 
-use lexer::{Lexer, Token, TType};
+use lexer::{Lexer, TType, Token};
 
 fn main() {
     println!("Hello, world!");

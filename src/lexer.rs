@@ -1,4 +1,4 @@
-use crate::{VLispResult};
+use crate::VLispResult;
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum TType {
@@ -20,9 +20,9 @@ impl TType {
             TType::Quote => "Quote",
             TType::LParen => "Opening Parenthese",
             TType::RParen => "Closing Parenthese",
-        }.to_string()
+        }
+        .to_string()
     }
-
 }
 
 #[derive(Clone, Debug)]
@@ -75,23 +75,25 @@ impl Lexer {
     fn add_token(&mut self, ttype: TType) {
         self.output.push(Token::new(ttype, self.line, self.column));
     }
-    fn proc_token(&mut self) -> Result<(), String>{
+    fn proc_token(&mut self) -> Result<(), String> {
         let c = self.advance();
 
         match c {
             '(' => self.add_token(TType::LParen),
             ')' => self.add_token(TType::RParen),
             '"' => self.string()?,
-            ' ' | '\t' | '\r' => {},
+            ' ' | '\t' | '\r' => {}
             '\n' => {
                 self.line += 1;
                 self.column = 0;
             }
             '\'' => self.add_token(TType::Quote),
-            _ => if c.is_digit(10) {
-                self.number();
-            } else {
-                self.identifier();
+            _ => {
+                if c.is_digit(10) {
+                    self.number();
+                } else {
+                    self.identifier();
+                }
             }
         }
 
@@ -104,8 +106,9 @@ impl Lexer {
             self.advance();
         }
 
-        self.add_token(TType::Ident(self.input[self.start..self.current].to_string()));
-
+        self.add_token(TType::Ident(
+            self.input[self.start..self.current].to_string(),
+        ));
     }
     fn number(&mut self) {
         while !self.is_at_end() && self.peek().is_digit(10) {
@@ -127,9 +130,8 @@ impl Lexer {
             _ => match &raw.parse::<f32>() {
                 Ok(f) => self.add_token(TType::Float(*f)),
                 _ => panic!("Bug: INVALID_NUMBER_SHOULD_BE_VALID"),
-            }
+            },
         }
-
     }
     fn string(&mut self) -> Result<(), String> {
         while !self.is_at_end() && self.peek() != '"' {
@@ -141,12 +143,17 @@ impl Lexer {
         }
 
         if self.is_at_end() {
-            return Err(format!("{}:{} | Unterminated String.", self.line, self.column));
+            return Err(format!(
+                "{}:{} | Unterminated String.",
+                self.line, self.column
+            ));
         }
 
         self.advance();
 
-        self.add_token(TType::String(self.input[self.start + 1..self.current - 1].to_string()));
+        self.add_token(TType::String(
+            self.input[self.start + 1..self.current - 1].to_string(),
+        ));
 
         Ok(())
     }
@@ -155,7 +162,7 @@ impl Lexer {
 
         while !self.is_at_end() {
             match self.proc_token() {
-                Ok(_) => {},
+                Ok(_) => {}
                 Err(e) => errors.push(e),
             }
             self.start = self.current;
