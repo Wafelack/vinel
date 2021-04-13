@@ -1,5 +1,7 @@
 use crate::{parser::{ExprT, Expr}, VLispResult};
 
+mod map;
+
 pub struct Compiler {
     input: Vec<Expr>,
     output: String,
@@ -21,7 +23,10 @@ impl Compiler {
             ExprT::Number(i) => Ok(format!("{}", i)),
             ExprT::Float(f) => Ok(format!("{}", f)),
             ExprT::Var(s) => Ok(format!("{}", s)),
-            ExprT::Call(function, arguments) => todo!(),
+            ExprT::Call(function, arguments) => match function.as_str() {
+                "map" => self.map(),
+                _ => todo!(),
+            }
             ExprT::Symbol(_) => Err(format!("{}:{} | Expected Variable, Function Call, Float, Number or String, found Symbol.", line, column))
         }
 
