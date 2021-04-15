@@ -24,7 +24,7 @@ impl Compiler {
             ExprT::Float(f) => Ok(format!("{}", f)),
             ExprT::Var(s) => Ok(format!("{}", s)),
             ExprT::Call(function, arguments) => match function.as_str() {
-                "map" => self.map(),
+                "map" => self.map(arguments),
                 _ => todo!(),
             }
             ExprT::Symbol(_) => Err(format!("{}:{} | Expected Variable, Function Call, Float, Number or String, found Symbol.", line, column))
@@ -34,7 +34,7 @@ impl Compiler {
     pub fn compile(&mut self) -> VLispResult<String> {
         let mut errors = vec![];
 
-        for expr in self.input {
+        for expr in self.input.clone() {
             let to_push = match self.compile_expr(expr) {
                 Ok(s) => s,
                 Err(e) => {

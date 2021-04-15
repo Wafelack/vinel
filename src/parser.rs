@@ -1,4 +1,4 @@
-use crate::{TType, Token, VLispResult};
+use crate::{lexer::{TType, Token}, VLispResult};
 use std::mem::discriminant;
 
 #[derive(Clone, Debug, PartialEq)]
@@ -24,6 +24,16 @@ impl Expr {
             line,
             column,
         }
+    }
+    pub fn get_type(&self) -> String {
+        match self.exprt {
+            ExprT::String(_) => "String",
+            ExprT::Number(_) => "Number",
+            ExprT::Float(_) => "Float",
+            ExprT::Symbol(_) => "Symbol",
+            ExprT::Call(_, _) => "Function Call",
+            ExprT::Var(_) => "Variable",
+        }.to_string()
     }
 }
 

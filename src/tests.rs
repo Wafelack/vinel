@@ -3,8 +3,23 @@ mod test {
     use crate::{
         lexer::{Lexer, TType, Token},
         parser::{Expr, ExprT, Parser},
+        compiler::{Compiler},
         VLispResult,
     };
+
+    mod compiler {
+        use super::*;
+
+        #[test]
+        fn map() -> VLispResult<()> {
+            let tokens = Lexer::new(r#"(map "<leader>foo" 5 'normal 'recursive 'buffer)"#).proc_tokens()?;
+            let expressions = Parser::new(tokens).parse()?;
+            let output = Compiler::new(expressions).compile()?;
+            println!("{}", output);
+            Ok(())
+        }
+
+    }
 
     mod parser {
         use super::*;
