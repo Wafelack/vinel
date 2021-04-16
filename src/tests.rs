@@ -15,9 +15,19 @@ mod test {
             let tokens = Lexer::new(r#"(map "<leader>foo" 5 'normal 'recursive 'buffer)"#).proc_tokens()?;
             let expressions = Parser::new(tokens).parse()?;
             let output = Compiler::new(expressions).compile()?;
-            println!("{}", output);
+            assert_eq!(output.as_str(), "nmap <buffer> <leader>foo 5\n");
             Ok(())
         }
+
+        #[test]
+        fn r#let() -> VLispResult<()> {
+            let tokens = Lexer::new(r#"(let foo "bar" 'script)"#).proc_tokens()?;
+            let expressions = Parser::new(tokens).parse()?;
+            let output = Compiler::new(expressions).compile()?;
+            assert_eq!(output.as_str(), "let s:foo = \"bar\"\n");
+            Ok(())
+        }
+
 
     }
 
