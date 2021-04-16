@@ -26,7 +26,7 @@ impl Compiler {
                     _ => return Err(format!("{}:{} | {}: Unknown symbol.", arg.line, arg.column, symbol))
                 }
             } else {
-                to_do.push_str(&self.compile_expr(arg.clone())?);
+                to_do.push_str(&self.compile_expr(arg.clone(), true)?);
             }
         }
     

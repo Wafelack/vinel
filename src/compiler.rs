@@ -14,7 +14,7 @@ impl Compiler {
             output: "".to_string(),
         }
     }
-    pub fn compile_expr(&mut self, expr: Expr) -> Result<String, String> {
+    pub fn compile_expr(&mut self, expr: Expr, in_expr: bool) -> Result<String, String> {
            
         let (exprt, line, column) = (expr.exprt, expr.line, expr.column);
 
@@ -24,7 +24,9 @@ impl Compiler {
             ExprT::Float(f) => Ok(format!("{}", f)),
             ExprT::Var(s) => Ok(format!("{}", s)),
             ExprT::Call(function, arguments) => match function.as_str() {
-                "map" => self.map(arguments),
+                "map" => {
+                    Ok(format!("{}{}{}", if in_expr { ":" } else { "" }, self.map(arguments)?, if in_expr { "<CR>" } else { "" }))
+                },
                 _ => todo!(),
             }
             ExprT::Symbol(_) => Err(format!("{}:{} | Expected Variable, Function Call, Float, Number or String, found Symbol.", line, column))
@@ -35,7 +37,7 @@ impl Compiler {
         let mut errors = vec![];
 
         for expr in self.input.clone() {
-            let to_push = match self.compile_expr(expr) {
+            let to_push = match self.compile_expr(expr, false) {
                 Ok(s) => s,
                 Err(e) => {
                     errors.push(e);
