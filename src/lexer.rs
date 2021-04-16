@@ -82,6 +82,9 @@ impl Lexer {
             '(' => self.add_token(TType::LParen),
             ')' => self.add_token(TType::RParen),
             '"' => self.string()?,
+            ';' => while !self.is_at_end() && self.peek() != '\n' {
+                self.advance();
+            } 
             ' ' | '\t' | '\r' => {}
             '\n' => {
                 self.line += 1;
