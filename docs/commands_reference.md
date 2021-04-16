@@ -48,7 +48,7 @@ get
 
 ![Status](https://img.shields.io/badge/Status-Implemented-sucess)
 
-## Description
+### Description
 
 Get a property value.
 
@@ -66,3 +66,17 @@ set
 ---
 
 ![Status](https://img.shields.io/badge/Status-Unimplemented-critical)
+
+## Description
+
+Set a property value.
+
+### Syntax
+
+```scheme
+(set
+	option: Var 				;; The option to set
+	('toggle | 'reset | 'off | 'vi | 'vim)? ;; The change to apply
+	value: Expr 				;; The value to associate to the expression	
+	)
+```
