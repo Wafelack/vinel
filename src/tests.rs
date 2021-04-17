@@ -27,6 +27,14 @@ mod test {
             assert_eq!(output.as_str(), "let s:foo = \"bar\"\n");
             Ok(())
         }
+        #[test]
+        fn get() -> VLispResult<()> {
+            let tokens = Lexer::new("(get)(get foo)(get 'all)(get 'termcap 'newline)").proc_tokens()?;
+            let expressions = Parser::new(tokens).parse()?;
+            let output = Compiler::new(expressions).compile()?;
+            assert_eq!(output.as_str(), "set\nset foo?\nset all\nset! termcap\n");
+            Ok(())
+        }
 
 
     }
@@ -48,7 +56,7 @@ mod test {
             assert_eq!(
                 expressions,
                 vec![ExprT::String("Hello, World !".to_string())]
-            );
+                );
 
             Ok(())
         }
@@ -88,8 +96,8 @@ mod test {
                 vec![ExprT::Call(
                     "call".to_string(),
                     vec!(Expr::new(ExprT::Var("foo".to_string()), 1, 9))
-                )]
-            );
+                    )]
+                );
 
             Ok(())
         }

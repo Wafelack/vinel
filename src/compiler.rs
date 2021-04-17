@@ -2,6 +2,7 @@ use crate::{parser::{ExprT, Expr}, VLispResult};
 
 mod map;
 mod r#let;
+mod get;
 
 pub struct Compiler {
     input: Vec<Expr>,
@@ -32,6 +33,7 @@ impl Compiler {
             ExprT::Call(function, arguments) => match function.as_str() {
                 "map" => adapt(self.map(arguments)?, in_expr),
                 "let" => adapt(self.let_(arguments)?, in_expr),
+                "get" => adapt(self.get(arguments)?, in_expr),
                 _ => todo!(),
             }
             ExprT::Symbol(_) => Err(format!("{}:{} | Expected Variable, Function Call, Float, Number or String, found Symbol.", line, column))

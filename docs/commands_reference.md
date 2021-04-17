@@ -17,10 +17,10 @@ Map a sequence of keys to an action.
 ```scheme
 (map
 	keys: String ;; The keys sequence
-	action*: Command ;; The action(s) that will be triggered
-	('normal | 'insert | 'visual)? ;; The mode when the mapping should be active (defaults to all modes)
+	action*: Command 						;; The action(s) that will be triggered
+	('normal | 'insert | 'visual)? 					;; The mode when the mapping should be active (defaults to all modes)
 	('buffer, 'nowait, 'silent, 'special, 'script, 'expr, 'unique)? ;; Special arguments 
-	'recursive? ;; Specify to enable recurson for the command
+	'recursive? 							;; Specify to enable recurson for the command
 	)
 ```
 
@@ -37,8 +37,32 @@ Declare a variable.
 
 ```scheme
 (let 
-	name: Var ;; The variable name
-	value: Expression ;; The variable value
+	name: Var 						   ;; The variable name
+	value: Expression 					   ;; The variable value
 	('global | 'script | 'window | 'tab | 'buffer | 'function) ;; The variable scope
 	)
 ```
+
+get
+---
+
+![Status](https://img.shields.io/badge/Status-Implemented-sucess)
+
+## Description
+
+Get a property value.
+
+### Syntax
+
+```scheme
+(get
+	option?: Var       ;; The option to get (if not set, we will refer to the second parameter).	
+	('all | 'termcap)? ;; Options to differ value display (not used if `option` is present).
+	'newline?          ;; Specifies to display a newline after each option
+)
+```
+
+set
+---
+
+![Status](https://img.shields.io/badge/Status-Unimplemented-critical)
