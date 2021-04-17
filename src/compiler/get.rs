@@ -28,7 +28,7 @@ impl Compiler {
         let (option, newline, termcap, all) = if args.len() == 0 {
             (None, false, false, false)
         } else if args.len() == 1 {
-            if let ExprT::Var(option) = &args[0].exprt {
+            if let ExprT::Identifier(option) = &args[0].exprt {
                 (Some(option), false, false, false)
             } else if let ExprT::Symbol(sym) = &args[0].exprt {
                 match sym.as_str() {
@@ -38,7 +38,7 @@ impl Compiler {
                     _ => return Err(format!("{}:{} | {}: Unknown symbol.", &args[0].line, &args[0].column, sym))
                 }
             } else {
-                return Err(format!("{}:{} | Expected argument of type Symbol or Variable, but found one of type {}.", &args[0].line, &args[0].column, args[0].get_type()))
+                return Err(format!("{}:{} | Expected argument of type Symbol or Identifieriable, but found one of type {}.", &args[0].line, &args[0].column, args[0].get_type()))
             }
         } else {
             let (mut newline, mut termcap, mut all) = if let ExprT::Symbol(sym) = &args[0].exprt {

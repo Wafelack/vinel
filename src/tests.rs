@@ -29,6 +29,16 @@ mod test {
         use super::*;
 
         #[test]
+        fn set() -> VLispResult<()> {
+            let tokens = Lexer::new("(set bar)(set foo 'toggle)(set foo 'off)(set bar 'vi)(set moo 'vim)(set foobar 'reset)").proc_tokens()?;
+            let expressions = Parser::new(tokens).parse()?;
+            let output = Compiler::new(expressions).compile()?;
+            assert_eq!(output.as_str(), "set bar\nset invfoo\nset nofoo\nset bar&vi\nset moo&vim\nset foobar&\n");
+            Ok(())
+
+        }
+
+        #[test]
         fn map() -> VLispResult<()> {
             let tokens = Lexer::new(r#"(map "<leader>foo" 5 'normal 'recursive 'buffer)"#).proc_tokens()?;
             let expressions = Parser::new(tokens).parse()?;
@@ -113,7 +123,7 @@ mod test {
                 expressions,
                 vec![ExprT::Call(
                     "call".to_string(),
-                    vec!(Expr::new(ExprT::Var("foo".to_string()), 1, 9))
+                    vec!(Expr::new(ExprT::Identifier("foo".to_string()), 1, 9))
                     )]
                 );
 

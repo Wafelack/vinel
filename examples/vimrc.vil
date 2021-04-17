@@ -25,7 +25,7 @@
 (set showmode 'off) ;; Status bar
 
 (map "<leader>sv" (source $MYVIMRC) 'normal)
-(map "<leader>i" (mark m)(top)(indent)(bottom)(goto m))
+(map "<leader>i" (mark m)(top)(indent)(bottom)(goto m) 'normal)
 
 ;; Tabs
 (map "1" (gotab 1) 'normal)

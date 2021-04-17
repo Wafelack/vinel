@@ -6,7 +6,7 @@ This file will contain all the Vim Lisp commands reference, it means a descripti
 map
 ---
 
-![Status](https://img.shields.io/badge/Status-Implemented-sucess)
+![Status](https://img.shields.io/badge/Status-Implemented-success)
 
 ### Description
 
@@ -28,7 +28,7 @@ Map a sequence of keys to an action.
 let
 ---
 
-![Status](https://img.shields.io/badge/Status-Implemented-sucess)
+![Status](https://img.shields.io/badge/Status-Implemented-success)
 
 ### Description
 
@@ -47,7 +47,7 @@ Declare a variable.
 get
 ---
 
-![Status](https://img.shields.io/badge/Status-Implemented-sucess)
+![Status](https://img.shields.io/badge/Status-Implemented-success)
 
 ### Description
 
@@ -66,7 +66,7 @@ Get a property value.
 set
 ---
 
-![Status](https://img.shields.io/badge/Status-Unimplemented-critical)
+![Status](https://img.shields.io/badge/Status-Implemented-success)
 
 ## Description
 

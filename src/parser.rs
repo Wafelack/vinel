@@ -26,7 +26,7 @@ pub enum ExprT {
     Float(f32),
     Symbol(String),
     Call(String, Vec<Expr>),
-    Var(String),
+    Identifier(String),
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -50,7 +50,7 @@ impl Expr {
             ExprT::Float(_) => "Float",
             ExprT::Symbol(_) => "Symbol",
             ExprT::Call(_, _) => "Function Call",
-            ExprT::Var(_) => "Variable",
+            ExprT::Identifier(_) => "Variable",
         }.to_string()
     }
 }
@@ -137,7 +137,7 @@ impl Parser {
         Ok(match token.ttype {
             TType::String(s) => Expr::new(ExprT::String(s), line, col),
             TType::Number(i) => Expr::new(ExprT::Number(i), line, col),
-            TType::Ident(i) => Expr::new(ExprT::Var(i), line, col),
+            TType::Ident(i) => Expr::new(ExprT::Identifier(i), line, col),
             TType::Float(f) => Expr::new(ExprT::Float(f), line, col),
             TType::Quote => {
                 let following = self.advance(TType::Ident("".to_string()))?;

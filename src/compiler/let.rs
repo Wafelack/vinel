@@ -25,10 +25,10 @@ impl Compiler {
             return Err(format!("Function `let` takes 3 arguments, but {} arguments were supplied.", args.len()));
         }
 
-        let name = if let ExprT::Var(name) = &args[0].exprt {
+        let name = if let ExprT::Identifier(name) = &args[0].exprt {
             name
         } else {
-            return Err(format!("{}:{} | Expected argument of type Var, but found one of type {}.", &args[0].line, &args[0].column, args[0].get_type()));
+            return Err(format!("{}:{} | Expected argument of type Identifier, but found one of type {}.", &args[0].line, &args[0].column, args[0].get_type()));
         };
 
         let value = self.compile_expr(args[1].clone(), true)?;
