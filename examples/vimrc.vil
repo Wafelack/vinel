@@ -1,0 +1,70 @@
+;; Vimrc : Vim configuration file
+;; By Wafelack <wafelack@protonmail.com>
+
+(set number)
+(set numberwidth 4)
+
+(let mapleader ",")
+
+(map "qs" (esc) 'insert)
+(map "qs" (esc) 'visual)
+
+(syntax enable)
+(set tergmuicolors) 
+(set makeprg cargo) 	 ;; Program for :make
+(set scrolloff 15) 	 ;; Minimum of lines shown around
+(set path (+= &path **)) ;; Fuzzy path search
+(set wildmenu) 		 ;; Menu options
+
+;; Disable undo and backup, source control exists.
+(set swapfile 'off)
+(set undofile 'off)
+(set backup 'off)
+(set writebackup 'off)
+
+(set showmode 'off) ;; Status bar
+
+(map "<leader>sv" (source $MYVIMRC) 'normal)
+(map "<leader>i" (mark m)(top)(indent)(bottom)(goto m))
+
+;; Tabs
+(map "1" (gotab 1) 'normal)
+(map "2" (gotab 2) 'normal)
+(map "3" (gotab 3) 'normal)
+(map "4" (gotab 4) 'normal)
+(map "5" (gotab 5) 'normal)
+(map "6" (gotab 6) 'normal)
+
+;; File explorer
+(let netrw_banner 0 'global)
+(let netrw_browse_split 0 'global)
+(let netrw_altv 1 'global)
+(let netrw_liststyle 3 'global) ;; Tree view
+
+(map "<leader>t" (edit ".")) ;; Toggle file explorer for current directory
+
+;; Plugins
+(call plug#begin "~/.vim/plugged")
+
+(Plug "ntk148v/vim-horizon") ;; Theme
+(Plug "vim-airline/vim-airline") ;; Status bar
+(Plug "vim-airline/vim-airline-themes") ;; Status bar
+(Plug "jiangmiao/auto-pairs") ;; Bracket pairing
+(Plug "luochen1990/rainbow") ;; Bracket colorization
+(Plug "wakatime/vim-wakatime") ;; Code activity tracking
+(Plug "dense-analysis/ale") ;; Linter
+
+(call plug#end)
+
+
+(colorscheme "horizon")
+(let rainbow_active 1 'global) ;; Enable backet colors
+(let airline_theme "jellybeans" 'global) ;; Status line theme
+
+;; Linter
+(set omnifunc ale#completion#OmniFunc)
+(let ale_completion_enabled 1 'global)
+(let ale_completion_autoimport 1 'global)
+(let ale_sign_column_always 1 'global)
+(let ale_fix_on_save 1 'global)
+(let ale_linters (dict "rust" (array "analyzer")) 'global)

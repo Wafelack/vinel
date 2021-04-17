@@ -78,6 +78,6 @@ Set a property value.
 (set
 	option: Var 				;; The option to set
 	('toggle | 'reset | 'off | 'vi | 'vim)? ;; The change to apply
-	value: Expr 				;; The value to associate to the expression	
+	value?: Expr 				;; The value to associate to the expression	
 	)
 ```

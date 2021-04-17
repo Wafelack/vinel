@@ -20,6 +20,7 @@ use crate::{parser::{ExprT, Expr}, VLispResult};
 
 mod map;
 mod r#let;
+mod set;
 mod get;
 
 pub struct Compiler {
