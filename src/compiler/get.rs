@@ -1,5 +1,4 @@
 /*
- *  GVLC is the Gentle Vim Lisp Compiler.
  *  Copyright (C) 2021  Wafelack
  * 
  *  This file is part of GVLC.

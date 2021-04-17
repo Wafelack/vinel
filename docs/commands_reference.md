@@ -18,7 +18,8 @@ Map a sequence of keys to an action.
 (map
 	keys: String ;; The keys sequence
 	action*: Command 						;; The action(s) that will be triggered
-	('normal | 'insert | 'visual)? 					;; The mode when the mapping should be active (defaults to all modes)
+	('normal | 'insert | 'visual)? 					;; The mode when the mapping should be active 
+									;; (defaults to all modes)
 	('buffer, 'nowait, 'silent, 'special, 'script, 'expr, 'unique)? ;; Special arguments 
 	'recursive? 							;; Specify to enable recurson for the command
 	)
