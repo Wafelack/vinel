@@ -19,6 +19,7 @@
 use crate::{parser::{ExprT, Expr}, VLispResult};
 
 mod map;
+mod operator;
 mod r#let;
 mod set;
 mod get;
@@ -56,6 +57,7 @@ impl Compiler {
                 "get" => adapt(self.get(arguments)?, in_expr),
                 "set" => adapt(self.set(arguments)?, in_expr),
                 "defun" => adapt(self.defun(arguments)?, in_expr),
+                "+" | "-" | "*" | "/" | "." | "==#" | "==?" | "==" | "is" | "isnot" | "is#" | "is?" | ">=#" | ">=?" | "and" | "or" | ">" | ">=" | "<" | "<=" | "=~" | "!~" | "!=" => self.operator(function.as_str(), arguments),
                 _ => todo!(),
             }
             ExprT::Symbol(_) => Err(format!("{}:{} | Expected Identifieriable, Function Call, Float, Number or String, found Symbol.", line, column))

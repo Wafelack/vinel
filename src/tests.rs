@@ -39,6 +39,16 @@ mod test {
         }
 
         #[test]
+        fn operators() -> VLispResult<()> {
+            let tokens = Lexer::new("(!= 3 4)(and (== 3 4) (== 3 5))").proc_tokens()?;
+            let expressions = Parser::new(tokens).parse()?;
+            let output = Compiler::new(expressions).compile()?;
+            assert_eq!(output.as_str(), "(3 != 4)\n((3 == 4) && (3 == 5))\n");
+            Ok(())
+        }
+
+
+        #[test]
         fn map() -> VLispResult<()> {
             let tokens = Lexer::new(r#"(map "<leader>foo" 5 'normal 'recursive 'buffer)"#).proc_tokens()?;
             let expressions = Parser::new(tokens).parse()?;
