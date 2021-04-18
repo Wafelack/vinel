@@ -109,11 +109,11 @@ cond
 
 ![Status](https://img.shields.io/badge/Status-Implemented-success)
 
-## Description
+### Description
 
 Perform conditional checks.
 
-## Syntax
+### Syntax
 
 ```scheme
 (cond
@@ -121,4 +121,21 @@ Perform conditional checks.
   ("else" | expr: Expr) ;; The check to perform
   to_do+: Expr 		;; The code to run if it matches 
  ]*)
+```
+
+call
+----
+
+![Status](https://img.shields.io/badge/Status-Implemented-success)
+
+### Description
+
+Call a function and discard its result.
+
+### Syntax
+
+```scheme
+(call
+	name: Identifier
+	args*: Expr)
 ```

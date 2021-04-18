@@ -63,6 +63,16 @@ mod compiler {
         assert_eq!(output.as_str(), "let s:foo = \"bar\"\n");
         Ok(())
     }
+
+    #[test]
+    fn call() -> VLispResult<()> {
+        let tokens = Lexer::new("(call foo 5 6)").proc_tokens()?;
+        let expressions = Parser::new(tokens).parse()?;
+        let output = Compiler::new(expressions).compile()?;
+        assert_eq!(output.as_str(), "call foo(5,6)\n");
+        Ok(())
+    }
+
     #[test]
     fn get() -> VLispResult<()> {
         let tokens = Lexer::new("(get)(get foo)(get 'all)(get 'termcap 'newline)").proc_tokens()?;

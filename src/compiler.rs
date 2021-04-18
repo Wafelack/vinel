@@ -25,6 +25,7 @@ mod set;
 mod get;
 mod defun;
 mod cond;
+mod call;
 
 pub struct Compiler {
     input: Vec<Expr>,
@@ -72,6 +73,7 @@ impl Compiler {
                 "defun" => adapt(self.defun(arguments)?, in_expr),
                 "+" | "-" | "*" | "/" | "." | "==#" | "==?" | "==" | "is" | "isnot" | "is#" | "is?" | ">=#" | ">=?" | "and" | "or" | ">" | ">=" | "<" | "<=" | "=~" | "!~" | "!=" => self.operator(function.as_str(), arguments),
                 "cond" => adapt(self.cond(arguments)?, in_expr),
+                "call" => adapt(self.call(arguments)?, in_expr),
                 _ => todo!(),
             }
             ExprT::Symbol(_) => Err(format!("{}:{} | Expected Identifier, Function Call, Float, Number or String, found Symbol.", line, column))
