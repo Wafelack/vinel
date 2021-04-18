@@ -63,6 +63,15 @@ mod test {
             assert_eq!(output.as_str(), "set\nset foo?\nset all\nset! termcap\n");
             Ok(())
         }
+        #[test]
+        fn defun() -> VLispResult<()> {
+            let tokens = Lexer::new("(defun 'script (foo bar))(defun 'no-overwrite (bar moo foo))(defun 'abort (moo) (map \"foo\" 98))").proc_tokens()?;
+            let expressions = Parser::new(tokens).parse()?;
+            let output = Compiler::new(expressions).compile()?;
+            assert_eq!(output.as_str(), "function! s:foo(bar)\nendfunction\nfunction bar(moo, foo)\nendfunction\nfunction! moo() abort\nnoremap  foo 98\nendfunction\n");
+            Ok(())
+        }
+
 
 
     }

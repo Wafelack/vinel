@@ -81,3 +81,25 @@ Set a property value.
 	value?: Expr 				;; The value to associate to the expression	
 	)
 ```
+
+defun
+-----
+
+![Status](https://img.shields.io/badge/Status-Implemented-success)
+
+## Description
+
+Define a function.
+
+### Syntax
+
+```scheme
+(defun 
+	'script?       ;; Specifies that the function is local to the current script
+	'no-overwrite? ;; Specifies not to overwrite existing functions
+	'abort?        ;; Specifies to abort on the first error
+
+	(name: Identifier
+	 arguments*: Identifier)
+	body*: Expr)
+```

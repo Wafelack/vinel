@@ -22,6 +22,7 @@ mod map;
 mod r#let;
 mod set;
 mod get;
+mod defun;
 
 pub struct Compiler {
     input: Vec<Expr>,
@@ -54,6 +55,7 @@ impl Compiler {
                 "let" => adapt(self.let_(arguments)?, in_expr),
                 "get" => adapt(self.get(arguments)?, in_expr),
                 "set" => adapt(self.set(arguments)?, in_expr),
+                "defun" => adapt(self.defun(arguments)?, in_expr),
                 _ => todo!(),
             }
             ExprT::Symbol(_) => Err(format!("{}:{} | Expected Identifieriable, Function Call, Float, Number or String, found Symbol.", line, column))
