@@ -38,7 +38,7 @@ impl Compiler {
                     _ => return Err(format!("{}:{} | {}: Unknown symbol.", &args[0].line, &args[0].column, sym))
                 }
             } else {
-                return Err(format!("{}:{} | Expected argument of type Symbol or Identifieriable, but found one of type {}.", &args[0].line, &args[0].column, args[0].get_type()))
+                return Err(format!("{}:{} | Expected Symbol or Identifier, found {}.", &args[0].line, &args[0].column, args[0].get_type()))
             }
         } else {
             let (mut newline, mut termcap, mut all) = if let ExprT::Symbol(sym) = &args[0].exprt {
@@ -49,7 +49,7 @@ impl Compiler {
                     _ => return Err(format!("{}:{} | {}: Unknown symbol.", &args[0].line, &args[0].column, sym)),
                 }
             } else {
-                return Err(format!("{}:{} | Expected argument of type Symbol, but found one of type {}.", &args[0].line, &args[0].column, args[0].get_type()));
+                return Err(format!("{}:{} | Expected Symbol, found {}.", &args[0].line, &args[0].column, args[0].get_type()));
             };
 
             if let ExprT::Symbol(sym) = &args[1].exprt {
@@ -71,7 +71,7 @@ impl Compiler {
                     _ => return Err(format!("{}:{} | {}: Unknown symbol.", &args[1].line, &args[1].column, sym)),
                 }
             } else {
-                return Err(format!("{}:{} | Expected argument of type Symbol, but found one of type {}.", &args[1].line, &args[1].column, args[1].get_type()));
+                return Err(format!("{}:{} | Expected Symbol, found {}.", &args[1].line, &args[1].column, args[1].get_type()));
             }
 
 

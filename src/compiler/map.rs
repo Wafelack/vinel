@@ -32,7 +32,7 @@ impl Compiler {
         let sequence = if let ExprT::String(s) = &args[0].exprt {
             s 
         } else {
-            return Err(format!("{}:{} | Expected argument of type String, but found one of type {}.", &args[0].line, &args[0].column, args[0].get_type()))
+            return Err(format!("{}:{} | Expected String, found {}.", &args[0].line, &args[0].column, args[0].get_type()))
         };
 
         for arg in args.iter().skip(1) {

@@ -28,7 +28,7 @@ impl Compiler {
         let name = if let ExprT::Identifier(name) = &args[0].exprt {
             name
         } else {
-            return Err(format!("{}:{} | Expected argument of type Identifier, but found one of type {}.", &args[0].line, &args[0].column, args[0].get_type()));
+            return Err(format!("{}:{} | Expected Identifier, found {}.", &args[0].line, &args[0].column, args[0].get_type()));
         };
 
         let value = self.compile_expr(args[1].clone(), true)?;
@@ -44,7 +44,7 @@ impl Compiler {
                 _ => return Err(format!("{}:{} | {}: Unknown symbol.", &args[2].line, &args[2].column, sym)),
             }
         } else {
-            return Err(format!("{}:{} | Expected argument of type Symbol, but found one of type {}.", &args[2].line, &args[2].column, args[2].get_type()));
+            return Err(format!("{}:{} | Expected Symbol, found {}.", &args[2].line, &args[2].column, args[2].get_type()));
         };
 
         Ok(format!("let {}:{} = {}", scope, name, value))

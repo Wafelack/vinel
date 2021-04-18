@@ -59,7 +59,7 @@ impl Compiler {
                         if let ExprT::Identifier(arg) = arg.exprt {
                             func_args.push(arg);
                         } else {
-                            return Err(format!("{}:{} | Expected an argument of type Identifier, found one of type {}.", arg.line, arg.column, arg.get_type()));
+                            return Err(format!("{}:{} | Expected an Identifier, found {}.", arg.line, arg.column, arg.get_type()));
                         }
                     }
                 } else {

@@ -29,14 +29,14 @@ impl Compiler {
             if let ExprT::Identifier(opt) = &args[0].exprt {
                 Ok(format!("set {}", opt))
             }  else {
-                Err(format!("{}:{} | Expected argument of type Identifier but found one of type {}.", &args[0].line, &args[0].column, &args[0].get_type()))
+                Err(format!("{}:{} | Expected Identifier, found {}.", &args[0].line, &args[0].column, &args[0].get_type()))
             }
 
         } else {
             let option = if let ExprT::Identifier(opt) = &args[0].exprt {
                 opt
             }  else {
-                return Err(format!("{}:{} | Expected argument of type Identifier but found one of type {}.", &args[0].line, &args[0].column, &args[0].get_type()));
+                return Err(format!("{}:{} | Expected Identifier, found {}.", &args[0].line, &args[0].column, &args[0].get_type()));
             };
 
             Ok(if let ExprT::Symbol(sym) = &args[1].exprt {

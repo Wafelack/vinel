@@ -60,7 +60,7 @@ impl Compiler {
                 "+" | "-" | "*" | "/" | "." | "==#" | "==?" | "==" | "is" | "isnot" | "is#" | "is?" | ">=#" | ">=?" | "and" | "or" | ">" | ">=" | "<" | "<=" | "=~" | "!~" | "!=" => self.operator(function.as_str(), arguments),
                 _ => todo!(),
             }
-            ExprT::Symbol(_) => Err(format!("{}:{} | Expected Identifieriable, Function Call, Float, Number or String, found Symbol.", line, column))
+            ExprT::Symbol(_) => Err(format!("{}:{} | Expected Identifier, Function Call, Float, Number or String, found Symbol.", line, column))
         }
 
     }
