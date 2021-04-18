@@ -83,6 +83,16 @@ mod test {
         }
 
         #[test]
+        fn cond() -> VLispResult<()> {
+            let tokens = Lexer::new("(cond [foo 5] [bar 6] [else 3])").proc_tokens()?;
+            let expressions = Parser::new(tokens).parse()?;
+            let output = Compiler::new(expressions).compile()?;
+            assert_eq!(output.as_str(), "if foo\n5\nelseif bar\n6\nelse \n3\nendif\n");
+            Ok(())
+        }
+
+
+        #[test]
         fn arrays() -> VLispResult<()> {
             let tokens = Lexer::new("[4 5 6 4]").proc_tokens()?;
             let expressions = Parser::new(tokens).parse()?;
