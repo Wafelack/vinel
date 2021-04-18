@@ -26,6 +26,7 @@ pub enum ExprT {
     Float(f32),
     Symbol(String),
     Call(String, Vec<Expr>),
+    Array(Vec<Expr>),
     Identifier(String),
 }
 
@@ -51,6 +52,7 @@ impl Expr {
             ExprT::Symbol(_) => "Symbol",
             ExprT::Call(_, _) => "Function Call",
             ExprT::Identifier(_) => "Variable",
+            ExprT::Array(_) => "Array",
         }.to_string()
     }
 }
@@ -147,6 +149,18 @@ impl Parser {
                     panic!("Bug: UNEXPECTED_NON_IDENTIFIER");
                 };
                 Expr::new(ExprT::Symbol(symbol), token.line, token.column)
+            }
+            TType::LBracket => {
+                let mut content = vec![]; 
+                while !self.is_at_end() && self.peek().unwrap().ttype != TType::RBracket {
+                    content.push(self.parse_expr()?);
+                }
+
+                if !self.is_at_end() {
+                    self.advance(TType::RBracket)?;
+                }
+
+                Expr::new(ExprT::Array(content), token.line, token.column)
             }
             TType::LParen => {
                 let next = self.pop()?;

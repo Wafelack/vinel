@@ -82,7 +82,14 @@ mod test {
             Ok(())
         }
 
-
+        #[test]
+        fn arrays() -> VLispResult<()> {
+            let tokens = Lexer::new("[4 5 6 4]").proc_tokens()?;
+            let expressions = Parser::new(tokens).parse()?;
+            let output = Compiler::new(expressions).compile()?;
+            assert_eq!(output.as_str(), "[4,5,6,4]\n");
+            Ok(())
+        }
 
     }
 
@@ -132,6 +139,21 @@ mod test {
             assert_eq!(expressions, vec![ExprT::Symbol("recursive".to_string())]);
 
             Ok(())
+        }
+
+        #[test]
+        fn array() -> VLispResult<()> {
+            let tokens = Lexer::new(r#"[]"#).proc_tokens()?;
+            let expressions = types_from_expresssions(Parser::new(tokens).parse()?);
+            assert_eq!(
+                expressions,
+                vec![ExprT::Array(
+                    vec![]
+                    )]
+                );
+
+            Ok(())
+
         }
 
         #[test]
@@ -189,6 +211,12 @@ mod test {
         fn identifier() -> VLispResult<()> {
             let ttypes = types_from_tokens(Lexer::new("define").proc_tokens()?);
             assert_eq!(ttypes, vec![TType::Ident("define".to_string())]);
+            Ok(())
+        }
+        #[test]
+        fn brackets() -> VLispResult<()> {
+            let ttypes = types_from_tokens(Lexer::new("[]").proc_tokens()?);
+            assert_eq!(ttypes, vec![TType::LBracket, TType::RBracket]);
             Ok(())
         }
 

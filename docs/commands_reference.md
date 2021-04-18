@@ -117,8 +117,8 @@ Proceed conditional checks.
 
 ```scheme
 (cond
- (
+ [
   ("else" | expr: Expr) ;; The check to perform
   to_do+: Expr 		;; The code to run if it matches 
- )*)
+ ]*)
 ```

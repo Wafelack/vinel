@@ -24,6 +24,7 @@ mod r#let;
 mod set;
 mod get;
 mod defun;
+mod cond;
 
 pub struct Compiler {
     input: Vec<Expr>,
@@ -51,6 +52,18 @@ impl Compiler {
             ExprT::Number(i) => Ok(format!("{}", i)),
             ExprT::Float(f) => Ok(format!("{}", f)),
             ExprT::Identifier(s) => Ok(format!("{}", s)),
+            ExprT::Array(exprs) => {
+                let mut new = "[".to_string();
+                let length = exprs.len();
+                for (idx, expr)in exprs.into_iter().enumerate() {
+                    new.push_str(&self.compile_expr(expr, false)?);
+                    if idx != length - 1 {
+                        new.push(',');
+                    }
+                }
+                new.push(']');
+                Ok(new)
+            }
             ExprT::Call(function, arguments) => match function.as_str() {
                 "map" => adapt(self.map(arguments)?, in_expr),
                 "let" => adapt(self.let_(arguments)?, in_expr),
@@ -58,6 +71,7 @@ impl Compiler {
                 "set" => adapt(self.set(arguments)?, in_expr),
                 "defun" => adapt(self.defun(arguments)?, in_expr),
                 "+" | "-" | "*" | "/" | "." | "==#" | "==?" | "==" | "is" | "isnot" | "is#" | "is?" | ">=#" | ">=?" | "and" | "or" | ">" | ">=" | "<" | "<=" | "=~" | "!~" | "!=" => self.operator(function.as_str(), arguments),
+                "cond" => adapt(self.cond(arguments)?, in_expr),
                 _ => todo!(),
             }
             ExprT::Symbol(_) => Err(format!("{}:{} | Expected Identifier, Function Call, Float, Number or String, found Symbol.", line, column))

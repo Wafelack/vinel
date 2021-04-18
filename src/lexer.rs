@@ -27,10 +27,14 @@ pub enum TType {
     Quote,
     LParen,
     RParen,
+    LBracket,
+    RBracket,
 }
 impl TType {
     pub fn get_type(&self) -> String {
         match self {
+            TType::RBracket => "Closing Bracket",
+            TType::LBracket => "Opening Bracket",
             TType::String(_) => "String",
             TType::Number(_) => "Number",
             TType::Float(_) => "Float",
@@ -99,6 +103,8 @@ impl Lexer {
         match c {
             '(' => self.add_token(TType::LParen),
             ')' => self.add_token(TType::RParen),
+            '[' => self.add_token(TType::LBracket),
+            ']' => self.add_token(TType::RBracket),
             '"' => self.string()?,
             ';' => while !self.is_at_end() && self.peek() != '\n' {
                 self.advance();
