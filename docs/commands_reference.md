@@ -103,3 +103,22 @@ Define a function.
 	 arguments*: Identifier)
 	body*: Expr)
 ```
+
+cond
+----
+
+![Status](https://img.shields.io/badge/Status-Unimplemented-critical)
+
+## Description
+
+Proceed conditional checks.
+
+## Syntax
+
+```scheme
+(cond
+ (
+  ("else" | expr: Expr) ;; The check to perform
+  to_do+: Expr 		;; The code to run if it matches 
+ )*)
+```
