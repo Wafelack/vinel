@@ -139,3 +139,21 @@ Call a function and discard its result.
 	name: Identifier
 	args*: Expr)
 ```
+
+source
+------
+
+![Status](https://img.shields.io/badge/Status-Implemented-success)
+
+### Description
+
+Source a Vim script file
+
+### Syntax
+
+```scheme
+(source 
+	file: Identifier
+	'normal? ;; Equivalent to the ! after the Vim command
+	)
+```

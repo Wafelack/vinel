@@ -109,6 +109,16 @@ mod compiler {
         Ok(())
     }
 
+    #[test]
+    fn source() -> VLispResult<()> {
+        let tokens = Lexer::new(r#"(source "foo.vim")(source $MYVIMRC 'normal)"#).proc_tokens()?;
+        let expressions = Parser::new(tokens).parse()?;
+        let output = Compiler::new(expressions).compile()?;
+        assert_eq!(output.as_str(), "source foo.vim\nsource! $MYVIMRC\n");
+        Ok(())
+    }
+
+
 }
 
 mod parser {

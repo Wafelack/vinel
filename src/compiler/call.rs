@@ -22,7 +22,7 @@ impl Compiler {
     pub fn call(&mut self, args: Vec<Expr>) -> Result<String, String> {
 
         if args.len() < 1  {
-            return Err(format!("Function `defun` takes 1 or more arguments, but 0 arguments were supplied."));
+            return Err(format!("Function `call` takes 1 or more arguments, but 0 arguments were supplied."));
         }
 
         let fname = if let ExprT::Identifier(id) = &args[0].exprt {
