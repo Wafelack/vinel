@@ -107,7 +107,7 @@ Define a function.
 cond
 ----
 
-![Status](https://img.shields.io/badge/Status-Unimplemented-critical)
+![Status](https://img.shields.io/badge/Status-Implemented-success)
 
 ## Description
 
