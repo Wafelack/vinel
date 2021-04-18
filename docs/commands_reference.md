@@ -111,7 +111,7 @@ cond
 
 ## Description
 
-Proceed conditional checks.
+Perform conditional checks.
 
 ## Syntax
 

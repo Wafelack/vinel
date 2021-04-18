@@ -19,6 +19,7 @@
 mod lexer;
 mod parser;
 mod compiler;
+#[cfg(test)]
 mod tests;
 
 fn main() {
