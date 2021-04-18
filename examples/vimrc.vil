@@ -13,7 +13,7 @@
 (set tergmuicolors) 
 (set makeprg cargo) 	 ;; Program for :make
 (set scrolloff 15) 	 ;; Minimum of lines shown around
-(set path (+= &path **)) ;; Fuzzy path search
+(set path (+ &path **)) ;; Fuzzy path search
 (set wildmenu) 		 ;; Menu options
 
 ;; Disable undo and backup, source control exists.
