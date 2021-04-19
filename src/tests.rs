@@ -118,6 +118,16 @@ mod compiler {
         Ok(())
     }
 
+    #[test]
+    fn edit() -> VLispResult<()> {
+        let tokens = Lexer::new(r#"(edit)(edit 'discard)(edit "foo.toml")(edit 'discard $MYVIMRC)"#).proc_tokens()?;
+        let expressions = Parser::new(tokens).parse()?;
+        let output = Compiler::new(expressions).compile()?;
+        assert_eq!(output.as_str(), "edit\nedit!\nedit foo.toml\nedit! $MYVIMRC\n");
+        Ok(())
+    }
+
+
 
 }
 

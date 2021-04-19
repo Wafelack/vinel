@@ -153,7 +153,24 @@ Source a Vim script file
 
 ```scheme
 (source 
-	file: Identifier
+	file: Identifier | String
 	'normal? ;; Equivalent to the ! after the Vim command
 	)
 ```
+
+edit
+----
+
+![Status](https://img.shields.io/badge/Status-Implemented-success)
+
+### Description
+
+Edit a file.
+
+### Syntax
+
+```scheme
+(edit
+	file?: String | Identifier
+	'discard? ;; Specifies to discard the current buffer.
+)```

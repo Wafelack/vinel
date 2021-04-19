@@ -27,6 +27,7 @@ mod defun;
 mod cond;
 mod call;
 mod source;
+mod edit;
 
 pub struct Compiler {
     input: Vec<Expr>,
@@ -76,6 +77,7 @@ impl Compiler {
                 "cond" => adapt(self.cond(arguments)?, in_expr),
                 "call" => adapt(self.call(arguments)?, in_expr),
                 "source" => adapt(self.source(arguments)?, in_expr),
+                "edit" => adapt(self.edit(arguments)?, in_expr),
                 _ => todo!(),
             }
             ExprT::Symbol(_) => Err(format!("{}:{} | Expected Identifier, Function Call, Float, Number or String, found Symbol.", line, column))
