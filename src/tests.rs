@@ -127,8 +127,14 @@ mod compiler {
         Ok(())
     }
 
-
-
+    #[test]
+    fn marks() -> VLispResult<()> {
+        let tokens = Lexer::new("(mark m)(goto m)").proc_tokens()?;
+        let expressions = Parser::new(tokens).parse()?;
+        let output = Compiler::new(expressions).compile()?;
+        assert_eq!(output.as_str(), "mm\n`m\n");
+        Ok(())
+    }
 }
 
 mod parser {
