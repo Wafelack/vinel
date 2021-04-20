@@ -20,9 +20,9 @@ use crate::{compiler::Compiler, parser::{Expr, ExprT}};
 
 impl Compiler {
     pub fn let_(&mut self, args: Vec<Expr>) -> Result<String, String> {
-
+       
         if !(2..=3).contains(&args.len()) {
-            return Err(format!("Function `let` takes 2 or 3 arguments, but {} arguments were supplied.", args.len()));
+            return Err(format!("Function `let` takes 3 arguments, but {} arguments were supplied.", args.len()));
         }
 
         let name = if let ExprT::Identifier(name) = &args[0].exprt {
@@ -33,24 +33,20 @@ impl Compiler {
 
         let value = self.compile_expr(args[1].clone(), true)?;
 
-        let scope = if args.len() == 3 {
-            if let ExprT::Symbol(sym) = &args[2].exprt {
-               Some( match sym.as_str() {
-                    "global" => "g",
-                    "script" => "s",
-                    "window" => "w",
-                    "tab" => "t",
-                    "buffer" => "b",
-                    "function" => "l",
-                    _ => return Err(format!("{}:{} | {}: Unknown symbol.", &args[2].line, &args[2].column, sym)),
-                })
-            } else {
-                return Err(format!("{}:{} | Expected Symbol, found {}.", &args[2].line, &args[2].column, args[2].get_type()));
+        let scope = if let ExprT::Symbol(sym) = &args[2].exprt {
+            match sym.as_str() {
+                "global" => "g",
+                "script" => "s",
+                "window" => "w",
+                "tab" => "t",
+                "buffer" => "b",
+                "function" => "l",
+                _ => return Err(format!("{}:{} | {}: Unknown symbol.", &args[2].line, &args[2].column, sym)),
             }
         } else {
-            None
+            return Err(format!("{}:{} | Expected Symbol, found {}.", &args[2].line, &args[2].column, args[2].get_type()));
         };
 
-        Ok(format!("let {}{} = {}", if scope.is_some() { format!("{}:", scope.unwrap()) } else { "".to_string() }, name, value))
+        Ok(format!("let {}:{} = {}", scope, name, value))
     }
 }

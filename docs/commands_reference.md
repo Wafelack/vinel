@@ -40,7 +40,7 @@ Declare a variable.
 (let 
 	name: Var 						   ;; The variable name
 	value: Expression 					   ;; The variable value
-	('global | 'script | 'window | 'tab | 'buffer | 'function) ;; The variable scope
+	('global | 'script | 'window | 'tab | 'buffer | 'function)? ;; The variable scope
 	)
 ```
 
