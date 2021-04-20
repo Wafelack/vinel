@@ -154,6 +154,16 @@ mod compiler {
         Ok(())
     }
 
+    #[test]
+    fn raw() -> VLispResult<()> {
+        let tokens = Lexer::new(r#"(raw "nnoremap <buffer> <leader>i mmgg=G`m" "echom \"foobar\"")"#).proc_tokens()?;
+        let expressions = Parser::new(tokens).parse()?;
+        let output = Compiler::new(expressions).compile()?;
+        assert_eq!(output.as_str(), "nnoremap <buffer> <leader>i mmgg=G`m\nechom \"foobar\"\n\n");
+        Ok(())
+    }
+
+
 
 }
 

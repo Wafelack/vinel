@@ -161,7 +161,7 @@ impl Lexer {
         }
     }
     fn string(&mut self) -> Result<(), String> {
-        while !self.is_at_end() && self.peek() != '"' {
+        while !self.is_at_end() && !(self.peek() == '"' && self.input.chars().nth(self.current - 1).unwrap() != '\\') {
             if self.peek() == '\n' {
                 self.line += 1;
                 self.column = 0;
@@ -179,7 +179,7 @@ impl Lexer {
         self.advance();
 
         self.add_token(TType::String(
-            self.input[self.start + 1..self.current - 1].to_string(),
+            self.input[self.start + 1..self.current - 1].replace("\\\"", "\"").to_string(),
         ));
 
         Ok(())
