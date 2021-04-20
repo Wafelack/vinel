@@ -145,6 +145,16 @@ mod compiler {
         Ok(())
     }
 
+    #[test]
+    fn any() -> VLispResult<()> {
+        let tokens = Lexer::new(r#"(Plug "foobar/moo" 'command)(moo "foo" 42)"#).proc_tokens()?;
+        let expressions = Parser::new(tokens).parse()?;
+        let output = Compiler::new(expressions).compile()?;
+        assert_eq!(output.as_str(), "Plug \"foobar/moo\"\nmoo(\"foo\", 42)\n");
+        Ok(())
+    }
+
+
 }
 
 mod parser {
