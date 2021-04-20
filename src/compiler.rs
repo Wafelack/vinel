@@ -32,6 +32,7 @@ mod mark;
 mod colorscheme;
 mod any;
 mod raw;
+mod tabs;
 
 pub struct Compiler {
     input: Vec<Expr>,
@@ -88,6 +89,7 @@ impl Compiler {
                 "ret" => Ok("<CR>".to_string()),
                 "mark" => self.mark(arguments),
                 "goto" => self.goto(arguments),
+                "gotab" => self.gotab(arguments),
                 "colorscheme" => self.colorscheme(arguments),
                 "raw" => self.raw(arguments),
                 x => self.any(x, arguments, in_expr),

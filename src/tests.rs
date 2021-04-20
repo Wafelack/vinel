@@ -163,8 +163,14 @@ mod compiler {
         Ok(())
     }
 
-
-
+    #[test]
+    fn gotab() -> VLispResult<()> {
+        let tokens = Lexer::new("(gotab)(gotab 2)").proc_tokens()?;
+        let expressions = Parser::new(tokens).parse()?;
+        let output = Compiler::new(expressions).compile()?;
+        assert_eq!(output.as_str(), "gt\n2gt\n");
+        Ok(())
+    }
 }
 
 mod parser {
