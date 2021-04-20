@@ -78,6 +78,8 @@ impl Compiler {
                 "call" => adapt(self.call(arguments)?, in_expr),
                 "source" => adapt(self.source(arguments)?, in_expr),
                 "edit" => adapt(self.edit(arguments)?, in_expr),
+                "top" => Ok("gg".to_string()),
+                "bottom" => Ok("G".to_string()),
                 _ => todo!(),
             }
             ExprT::Symbol(_) => Err(format!("{}:{} | Expected Identifier, Function Call, Float, Number or String, found Symbol.", line, column))
