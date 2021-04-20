@@ -135,6 +135,16 @@ mod compiler {
         assert_eq!(output.as_str(), "mm\n`m\n");
         Ok(())
     }
+
+    #[test]
+    fn colorscheme() -> VLispResult<()> {
+        let tokens = Lexer::new(r#"(colorscheme)(colorscheme "horizon")"#).proc_tokens()?;
+        let expressions = Parser::new(tokens).parse()?;
+        let output = Compiler::new(expressions).compile()?;
+        assert_eq!(output.as_str(), "colorscheme\ncolorscheme horizon\n");
+        Ok(())
+    }
+
 }
 
 mod parser {

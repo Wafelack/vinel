@@ -29,6 +29,7 @@ mod call;
 mod source;
 mod edit;
 mod mark;
+mod colorscheme;
 
 pub struct Compiler {
     input: Vec<Expr>,
@@ -83,6 +84,7 @@ impl Compiler {
                 "bottom" => Ok("G".to_string()),
                 "mark" => self.mark(arguments),
                 "goto" => self.goto(arguments),
+                "colorscheme" => self.colorscheme(arguments),
                 _ => todo!(),
             }
             ExprT::Symbol(_) => Err(format!("{}:{} | Expected Identifier, Function Call, Float, Number or String, found Symbol.", line, column))

@@ -46,13 +46,13 @@
 ;; Plugins
 (call plug#begin "~/.vim/plugged")
 
-(Plug "ntk148v/vim-horizon") ;; Theme
-(Plug "vim-airline/vim-airline") ;; Status bar
-(Plug "vim-airline/vim-airline-themes") ;; Status bar
-(Plug "jiangmiao/auto-pairs") ;; Bracket pairing
-(Plug "luochen1990/rainbow") ;; Bracket colorization
-(Plug "wakatime/vim-wakatime") ;; Code activity tracking
-(Plug "dense-analysis/ale") ;; Linter
+(Plug "ntk148v/vim-horizon" 'command) ;; Theme
+(Plug "vim-airline/vim-airline" 'command) ;; Status bar
+(Plug "vim-airline/vim-airline-themes" 'command) ;; Status bar
+(Plug "jiangmiao/auto-pairs" 'command) ;; Bracket pairing
+(Plug "luochen1990/rainbow" 'command)  ;; Bracket colorization
+(Plug "wakatime/vim-wakatime" 'command) ;; Code activity tracking
+(Plug "dense-analysis/ale" 'command) ;; Linter
 
 (call plug#end)
 
