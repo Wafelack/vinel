@@ -171,6 +171,18 @@ mod compiler {
         assert_eq!(output.as_str(), "gt\n2gt\n");
         Ok(())
     }
+
+    #[test]
+    fn dict() -> VLispResult<()> {
+        let tokens = Lexer::new(r#"(dict 
+            "foo" "bar"
+            5 "moo")"#).proc_tokens()?;
+        let expressions = Parser::new(tokens).parse()?;
+        let output = Compiler::new(expressions).compile()?;
+        assert_eq!(output.as_str(), "{ \"foo\":\"bar\", 5:\"moo\" }\n");
+        Ok(())
+    }
+
 }
 
 mod parser {

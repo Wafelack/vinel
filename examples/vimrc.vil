@@ -67,4 +67,4 @@
 (let ale_completion_autoimport 1 'global)
 (let ale_sign_column_always 1 'global)
 (let ale_fix_on_save 1 'global)
-(let ale_linters (dict "rust" (array "analyzer")) 'global)
+(let ale_linters (dict "rust" ["analyzer"]) 'global)

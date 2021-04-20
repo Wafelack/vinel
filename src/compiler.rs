@@ -33,6 +33,7 @@ mod colorscheme;
 mod any;
 mod raw;
 mod tabs;
+mod dict;
 
 pub struct Compiler {
     input: Vec<Expr>,
@@ -92,6 +93,7 @@ impl Compiler {
                 "gotab" => self.gotab(arguments),
                 "colorscheme" => self.colorscheme(arguments),
                 "raw" => self.raw(arguments),
+                "dict" => self.dict(arguments),
                 x => self.any(x, arguments, in_expr),
             }
             ExprT::Symbol(_) => Err(format!("{}:{} | Expected Identifier, Function Call, Float, Number or String, found Symbol.", line, column))
