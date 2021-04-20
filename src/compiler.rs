@@ -84,6 +84,8 @@ impl Compiler {
                 "edit" => adapt(self.edit(arguments)?, in_expr),
                 "top" => Ok("gg".to_string()),
                 "bottom" => Ok("G".to_string()),
+                "esc" => Ok("<ESC>".to_string()),
+                "ret" => Ok("<CR>".to_string()),
                 "mark" => self.mark(arguments),
                 "goto" => self.goto(arguments),
                 "colorscheme" => self.colorscheme(arguments),

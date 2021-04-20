@@ -9,7 +9,7 @@
 (map "qs" (esc) 'insert)
 (map "qs" (esc) 'visual)
 
-(syntax enable)
+(syntax enable 'command)
 (set tergmuicolors) 
 (set makeprg cargo) 	 ;; Program for :make
 (set scrolloff 15) 	 ;; Minimum of lines shown around
