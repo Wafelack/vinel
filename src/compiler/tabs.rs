@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2021  Wafelack
- * 
+ *
  *  This file is part of GVLC.
  *
  *  GVLC is free software: you can redistribute it and/or modify
@@ -16,24 +16,42 @@
  *  You should have received a copy of the GNU General Public License
  *  along with GVLC.  If not, see <https://www.gnu.org/licenses/>.
  */
-use crate::{compiler::Compiler, parser::{Expr, ExprT}};
+use crate::{
+    compiler::Compiler,
+    parser::{Expr, ExprT},
+};
 
 impl Compiler {
     pub fn gotab(&mut self, args: Vec<Expr>) -> Result<String, String> {
         if !(0..=1).contains(&args.len()) {
-            return Err(format!("Function `gotab` takes 0 or 1 argument, but {} arguments were supplied.", args.len()));
+            return Err(format!(
+                "Function `gotab` takes 0 or 1 argument, but {} arguments were supplied.",
+                args.len()
+            ));
         }
 
         let number = if args.len() == 1 {
             if let ExprT::Number(n) = args[0].exprt {
                 Some(n)
             } else {
-                return Err(format!("{}:{} | Expected a Number, found a {}.", args[0].line, args[0].column, args[0].get_type()));
+                return Err(format!(
+                    "{}:{} | Expected a Number, found a {}.",
+                    args[0].line,
+                    args[0].column,
+                    args[0].get_type()
+                ));
             }
         } else {
             None
         };
 
-        Ok(format!("{}gt", if number.is_some() { format!("{}", number.unwrap()) } else { format!("") }))
+        Ok(format!(
+            "{}gt",
+            if number.is_some() {
+                format!("{}", number.unwrap())
+            } else {
+                format!("")
+            }
+        ))
     }
 }

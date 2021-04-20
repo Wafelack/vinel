@@ -12,4 +12,4 @@ codegen-units = 1
 opt-level = 3
 
 [dependencies]
-
+clap = "2.33.3"

@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2021  Wafelack
- * 
+ *
  *  This file is part of GVLC.
  *
  *  GVLC is free software: you can redistribute it and/or modify
@@ -16,13 +16,18 @@
  *  You should have received a copy of the GNU General Public License
  *  along with GVLC.  If not, see <https://www.gnu.org/licenses/>.
  */
-use crate::{compiler::Compiler, parser::{Expr, ExprT}};
+use crate::{
+    compiler::Compiler,
+    parser::{Expr, ExprT},
+};
 
 impl Compiler {
     pub fn colorscheme(&mut self, args: Vec<Expr>) -> Result<String, String> {
-        
         if args.len() > 1 {
-            return Err(format!("Function `colorscheme` takes 0 or 1 arguments, but {} arguments were supplied.", args.len()));
+            return Err(format!(
+                "Function `colorscheme` takes 0 or 1 arguments, but {} arguments were supplied.",
+                args.len()
+            ));
         }
 
         let scheme = if args.len() == 0 {
@@ -30,9 +35,21 @@ impl Compiler {
         } else if let ExprT::String(scheme) = &args[0].exprt {
             Some(scheme)
         } else {
-            return Err(format!("{}:{} | Expected a String, found a {}.", args[0].line, args[0].column, args[0].get_type()));
+            return Err(format!(
+                "{}:{} | Expected a String, found a {}.",
+                args[0].line,
+                args[0].column,
+                args[0].get_type()
+            ));
         };
 
-        Ok(format!("colorscheme{}", if scheme.is_some() { format!(" {}", scheme.unwrap()) } else { "".to_string() }))
+        Ok(format!(
+            "colorscheme{}",
+            if scheme.is_some() {
+                format!(" {}", scheme.unwrap())
+            } else {
+                "".to_string()
+            }
+        ))
     }
 }

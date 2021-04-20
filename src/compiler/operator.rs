@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2021  Wafelack
- * 
+ *
  *  This file is part of GVLC.
  *
  *  GVLC is free software: you can redistribute it and/or modify
@@ -21,7 +21,11 @@ use crate::{compiler::Compiler, parser::Expr};
 impl Compiler {
     pub fn operator(&mut self, operator: &str, args: Vec<Expr>) -> Result<String, String> {
         if args.len() != 2 {
-            return Err(format!("Function `{}` takes 2 arguments, but {} arguments were supplied.", operator, args.len()));
+            return Err(format!(
+                "Function `{}` takes 2 arguments, but {} arguments were supplied.",
+                operator,
+                args.len()
+            ));
         }
 
         let operator = if operator == "and" {
@@ -35,6 +39,6 @@ impl Compiler {
         let lhs = self.compile_expr(args[0].clone(), false)?;
         let rhs = self.compile_expr(args[1].clone(), false)?;
 
-        Ok(format!("({} {} {})", lhs, operator, rhs)) 
+        Ok(format!("({} {} {})", lhs, operator, rhs))
     }
 }

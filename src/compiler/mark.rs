@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2021  Wafelack
- * 
+ *
  *  This file is part of GVLC.
  *
  *  GVLC is free software: you can redistribute it and/or modify
@@ -16,19 +16,29 @@
  *  You should have received a copy of the GNU General Public License
  *  along with GVLC.  If not, see <https://www.gnu.org/licenses/>.
  */
-use crate::{compiler::Compiler, parser::{Expr, ExprT}};
+use crate::{
+    compiler::Compiler,
+    parser::{Expr, ExprT},
+};
 
 impl Compiler {
     pub fn mark(&mut self, args: Vec<Expr>) -> Result<String, String> {
-       
         if args.len() != 1 {
-            return Err(format!("Function `mark` takes 1 argument, but {} arguments were supplied.", args.len()));
+            return Err(format!(
+                "Function `mark` takes 1 argument, but {} arguments were supplied.",
+                args.len()
+            ));
         }
 
         let mark = if let ExprT::Identifier(m) = &args[0].exprt {
             m
         } else {
-            return Err(format!("{}:{} | Expected an Identifier, found a {}.", args[0].line, args[0].column, args[0].get_type()));
+            return Err(format!(
+                "{}:{} | Expected an Identifier, found a {}.",
+                args[0].line,
+                args[0].column,
+                args[0].get_type()
+            ));
         };
 
         if mark.len() != 1 {
@@ -39,15 +49,22 @@ impl Compiler {
     }
 
     pub fn goto(&mut self, args: Vec<Expr>) -> Result<String, String> {
-       
         if args.len() != 1 {
-            return Err(format!("Function `goto` takes 1 argument, but {} arguments were supplied.", args.len()));
+            return Err(format!(
+                "Function `goto` takes 1 argument, but {} arguments were supplied.",
+                args.len()
+            ));
         }
 
         let mark = if let ExprT::Identifier(m) = &args[0].exprt {
             m
         } else {
-            return Err(format!("{}:{} | Expected an Identifier, found a {}.", args[0].line, args[0].column, args[0].get_type()));
+            return Err(format!(
+                "{}:{} | Expected an Identifier, found a {}.",
+                args[0].line,
+                args[0].column,
+                args[0].get_type()
+            ));
         };
 
         if mark.len() != 1 {
@@ -56,5 +73,4 @@ impl Compiler {
 
         Ok(format!("`{}", mark))
     }
-
 }

@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2021  Wafelack
- * 
+ *
  *  This file is part of GVLC.
  *
  *  GVLC is free software: you can redistribute it and/or modify
@@ -16,7 +16,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with GVLC.  If not, see <https://www.gnu.org/licenses/>.
  */
-use crate::{lexer::{TType, Token}, VLispResult};
+use crate::{
+    lexer::{TType, Token},
+    VLispResult,
+};
 use std::mem::discriminant;
 
 #[derive(Clone, Debug, PartialEq)]
@@ -53,7 +56,8 @@ impl Expr {
             ExprT::Call(_, _) => "Function Call",
             ExprT::Identifier(_) => "Variable",
             ExprT::Array(_) => "Array",
-        }.to_string()
+        }
+        .to_string()
     }
 }
 
@@ -151,7 +155,7 @@ impl Parser {
                 Expr::new(ExprT::Symbol(symbol), token.line, token.column)
             }
             TType::LBracket => {
-                let mut content = vec![]; 
+                let mut content = vec![];
                 while !self.is_at_end() && self.peek().unwrap().ttype != TType::RBracket {
                     content.push(self.parse_expr()?);
                 }

@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2021  Wafelack
- * 
+ *
  *  This file is part of GVLC.
  *
  *  GVLC is free software: you can redistribute it and/or modify
@@ -17,9 +17,9 @@
  *  along with GVLC.  If not, see <https://www.gnu.org/licenses/>.
  */
 use crate::{
+    compiler::Compiler,
     lexer::{Lexer, TType, Token},
     parser::{Expr, ExprT, Parser},
-    compiler::{Compiler},
     VLispResult,
 };
 
@@ -31,9 +31,11 @@ mod compiler {
         let tokens = Lexer::new("(set bar)(set foo 'toggle)(set foo 'off)(set bar 'vi)(set moo 'vim)(set foobar 'reset)").proc_tokens()?;
         let expressions = Parser::new(tokens).parse()?;
         let output = Compiler::new(expressions).compile()?;
-        assert_eq!(output.as_str(), "set bar\nset invfoo\nset nofoo\nset bar&vi\nset moo&vim\nset foobar&\n");
+        assert_eq!(
+            output.as_str(),
+            "set bar\nset invfoo\nset nofoo\nset bar&vi\nset moo&vim\nset foobar&\n"
+        );
         Ok(())
-
     }
 
     #[test]
@@ -45,10 +47,10 @@ mod compiler {
         Ok(())
     }
 
-
     #[test]
     fn map() -> VLispResult<()> {
-        let tokens = Lexer::new(r#"(map "<leader>foo" 5 'normal 'recursive 'buffer)"#).proc_tokens()?;
+        let tokens =
+            Lexer::new(r#"(map "<leader>foo" 5 'normal 'recursive 'buffer)"#).proc_tokens()?;
         let expressions = Parser::new(tokens).parse()?;
         let output = Compiler::new(expressions).compile()?;
         assert_eq!(output.as_str(), "nmap <buffer> <leader>foo 5\n");
@@ -95,10 +97,12 @@ mod compiler {
         let tokens = Lexer::new("(cond [foo 5] [bar 6] [else 3])").proc_tokens()?;
         let expressions = Parser::new(tokens).parse()?;
         let output = Compiler::new(expressions).compile()?;
-        assert_eq!(output.as_str(), "if foo\n5\nelseif bar\n6\nelse \n3\nendif\n");
+        assert_eq!(
+            output.as_str(),
+            "if foo\n5\nelseif bar\n6\nelse \n3\nendif\n"
+        );
         Ok(())
     }
-
 
     #[test]
     fn arrays() -> VLispResult<()> {
@@ -120,10 +124,15 @@ mod compiler {
 
     #[test]
     fn edit() -> VLispResult<()> {
-        let tokens = Lexer::new(r#"(edit)(edit 'discard)(edit "foo.toml")(edit 'discard $MYVIMRC)"#).proc_tokens()?;
+        let tokens =
+            Lexer::new(r#"(edit)(edit 'discard)(edit "foo.toml")(edit 'discard $MYVIMRC)"#)
+                .proc_tokens()?;
         let expressions = Parser::new(tokens).parse()?;
         let output = Compiler::new(expressions).compile()?;
-        assert_eq!(output.as_str(), "edit\nedit!\nedit foo.toml\nedit! $MYVIMRC\n");
+        assert_eq!(
+            output.as_str(),
+            "edit\nedit!\nedit foo.toml\nedit! $MYVIMRC\n"
+        );
         Ok(())
     }
 
@@ -156,10 +165,15 @@ mod compiler {
 
     #[test]
     fn raw() -> VLispResult<()> {
-        let tokens = Lexer::new(r#"(raw "nnoremap <buffer> <leader>i mmgg=G`m" "echom \"foobar\"")"#).proc_tokens()?;
+        let tokens =
+            Lexer::new(r#"(raw "nnoremap <buffer> <leader>i mmgg=G`m" "echom \"foobar\"")"#)
+                .proc_tokens()?;
         let expressions = Parser::new(tokens).parse()?;
         let output = Compiler::new(expressions).compile()?;
-        assert_eq!(output.as_str(), "nnoremap <buffer> <leader>i mmgg=G`m\nechom \"foobar\"\n\n");
+        assert_eq!(
+            output.as_str(),
+            "nnoremap <buffer> <leader>i mmgg=G`m\nechom \"foobar\"\n\n"
+        );
         Ok(())
     }
 
@@ -174,15 +188,17 @@ mod compiler {
 
     #[test]
     fn dict() -> VLispResult<()> {
-        let tokens = Lexer::new(r#"(dict 
+        let tokens = Lexer::new(
+            r#"(dict 
             "foo" "bar"
-            5 "moo")"#).proc_tokens()?;
+            5 "moo")"#,
+        )
+        .proc_tokens()?;
         let expressions = Parser::new(tokens).parse()?;
         let output = Compiler::new(expressions).compile()?;
         assert_eq!(output.as_str(), "{ \"foo\":\"bar\", 5:\"moo\" }\n");
         Ok(())
     }
-
 }
 
 mod parser {
@@ -202,7 +218,7 @@ mod parser {
         assert_eq!(
             expressions,
             vec![ExprT::String("Hello, World !".to_string())]
-            );
+        );
 
         Ok(())
     }
@@ -237,15 +253,9 @@ mod parser {
     fn array() -> VLispResult<()> {
         let tokens = Lexer::new(r#"[]"#).proc_tokens()?;
         let expressions = types_from_expresssions(Parser::new(tokens).parse()?);
-        assert_eq!(
-            expressions,
-            vec![ExprT::Array(
-                vec![]
-                )]
-            );
+        assert_eq!(expressions, vec![ExprT::Array(vec![])]);
 
         Ok(())
-
     }
 
     #[test]
@@ -257,8 +267,8 @@ mod parser {
             vec![ExprT::Call(
                 "call".to_string(),
                 vec!(Expr::new(ExprT::Identifier("foo".to_string()), 1, 9))
-                )]
-            );
+            )]
+        );
 
         Ok(())
     }

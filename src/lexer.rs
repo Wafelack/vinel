@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2021  Wafelack
- * 
+ *
  *  This file is part of GVLC.
  *
  *  GVLC is free software: you can redistribute it and/or modify
@@ -106,9 +106,11 @@ impl Lexer {
             '[' => self.add_token(TType::LBracket),
             ']' => self.add_token(TType::RBracket),
             '"' => self.string()?,
-            ';' => while !self.is_at_end() && self.peek() != '\n' {
-                self.advance();
-            } 
+            ';' => {
+                while !self.is_at_end() && self.peek() != '\n' {
+                    self.advance();
+                }
+            }
             ' ' | '\t' | '\r' => {}
             '\n' => {
                 self.line += 1;
@@ -161,7 +163,9 @@ impl Lexer {
         }
     }
     fn string(&mut self) -> Result<(), String> {
-        while !self.is_at_end() && !(self.peek() == '"' && self.input.chars().nth(self.current - 1).unwrap() != '\\') {
+        while !self.is_at_end()
+            && !(self.peek() == '"' && self.input.chars().nth(self.current - 1).unwrap() != '\\')
+        {
             if self.peek() == '\n' {
                 self.line += 1;
                 self.column = 0;
@@ -179,7 +183,9 @@ impl Lexer {
         self.advance();
 
         self.add_token(TType::String(
-            self.input[self.start + 1..self.current - 1].replace("\\\"", "\"").to_string(),
+            self.input[self.start + 1..self.current - 1]
+                .replace("\\\"", "\"")
+                .to_string(),
         ));
 
         Ok(())

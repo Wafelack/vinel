@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2021  Wafelack
- * 
+ *
  *  This file is part of GVLC.
  *
  *  GVLC is free software: you can redistribute it and/or modify
@@ -16,24 +16,27 @@
  *  You should have received a copy of the GNU General Public License
  *  along with GVLC.  If not, see <https://www.gnu.org/licenses/>.
  */
-use crate::{parser::{ExprT, Expr}, VLispResult};
+use crate::{
+    parser::{Expr, ExprT},
+    VLispResult,
+};
 
-mod map;
-mod operator;
-mod r#let;
-mod set;
-mod get;
-mod defun;
-mod cond;
-mod call;
-mod source;
-mod edit;
-mod mark;
-mod colorscheme;
 mod any;
-mod raw;
-mod tabs;
+mod call;
+mod colorscheme;
+mod cond;
+mod defun;
 mod dict;
+mod edit;
+mod get;
+mod r#let;
+mod map;
+mod mark;
+mod operator;
+mod raw;
+mod set;
+mod source;
+mod tabs;
 
 pub struct Compiler {
     input: Vec<Expr>,
@@ -41,8 +44,12 @@ pub struct Compiler {
 }
 
 fn adapt(out: String, in_expr: bool) -> Result<String, String> {
-    Ok(format!("{}{}{}", if in_expr { ":" } else { "" }, out, if in_expr { "<CR>" } else { "" }))
-
+    Ok(format!(
+        "{}{}{}",
+        if in_expr { ":" } else { "" },
+        out,
+        if in_expr { "<CR>" } else { "" }
+    ))
 }
 
 impl Compiler {
@@ -53,7 +60,6 @@ impl Compiler {
         }
     }
     pub fn compile_expr(&mut self, expr: Expr, in_expr: bool) -> Result<String, String> {
-
         let (exprt, line, column) = (expr.exprt, expr.line, expr.column);
 
         match exprt {
@@ -98,7 +104,6 @@ impl Compiler {
             }
             ExprT::Symbol(_) => Err(format!("{}:{} | Expected Identifier, Function Call, Float, Number or String, found Symbol.", line, column))
         }
-
     }
     pub fn compile(&mut self) -> VLispResult<String> {
         let mut errors = vec![];
@@ -109,7 +114,7 @@ impl Compiler {
                 Err(e) => {
                     errors.push(e);
                     continue;
-                },
+                }
             };
 
             self.output.push_str(&format!("{}\n", to_push));
