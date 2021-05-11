@@ -1,5 +1,7 @@
 # GVLC
 
+**NOTE: This is not a real LISP. The syntax is only inspired.**
+
 The Gentle Vim Lisp Compiler is a compiler for the Vim Lisp programming language.
 
 Vim Lisp is a high level language targetting Vim Script, in order to make plugins creation and configuration more pleasant to do.
