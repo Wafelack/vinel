@@ -1,22 +1,22 @@
 /*
  *  Copyright (C) 2021  Wafelack
  *
- *  This file is part of GVLC.
+ *  This file is part of Vinal.
  *
- *  GVLC is free software: you can redistribute it and/or modify
+ *  Vinal is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  GVLC is distributed in the hope that it will be useful,
+ *  Vinal is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with GVLC.  If not, see <https://www.gnu.org/licenses/>.
+ *  along with Vinal.  If not, see <https://www.gnu.org/licenses/>.
  */
-use crate::VLispResult;
+use crate::VinalResult;
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum TType {
@@ -190,7 +190,7 @@ impl Lexer {
 
         Ok(())
     }
-    pub fn proc_tokens(&mut self) -> VLispResult<Vec<Token>> {
+    pub fn proc_tokens(&mut self) -> VinalResult<Vec<Token>> {
         let mut errors = vec![];
 
         while !self.is_at_end() {

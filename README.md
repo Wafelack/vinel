@@ -1,10 +1,6 @@
-# GVLC
+# Vinal
 
-**NOTE: This is not a real LISP. The syntax is only inspired.**
-
-The Gentle Vim Lisp Compiler is a compiler for the Vim Lisp programming language.
-
-Vim Lisp is a high level language targetting Vim Script, in order to make plugins creation and configuration more pleasant to do.
+Vinal Is Not A Lisp - Scripting language compiling to VimL.
 
 ## Missing commands
 
@@ -13,13 +9,10 @@ If you miss a special syntax for a command, fill free to created an issue to req
 ## Installation
 
 ```bash
-$ git clone https://github.com/wafelack/gvlc
-$ cd gvlc/
-$ cargo test
-$ cargo build --release
-$ cp target/release/gvlc /wherever/you/want
+$ git clone https://github.com/wafelack/vinal
+$ cargo install --path vinal
 ```
 
 ## License
 
-GVLC is licensed under the GNU General Public License version 3.0 and later.
+Vinal is licensed under the GNU General Public License version 3.0 and later.

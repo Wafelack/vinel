@@ -1,24 +1,24 @@
 /*
  *  Copyright (C) 2021  Wafelack
  *
- *  This file is part of GVLC.
+ *  This file is part of Vinal.
  *
- *  GVLC is free software: you can redistribute it and/or modify
+ *  Vinal is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  GVLC is distributed in the hope that it will be useful,
+ *  Vinal is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with GVLC.  If not, see <https://www.gnu.org/licenses/>.
+ *  along with Vinal.  If not, see <https://www.gnu.org/licenses/>.
  */
 use crate::{
     parser::{Expr, ExprT},
-    VLispResult,
+    VinalResult,
 };
 
 mod any;
@@ -105,7 +105,7 @@ impl Compiler {
             ExprT::Symbol(_) => Err(format!("{}:{} | Expected Identifier, Function Call, Float, Number or String, found Symbol.", line, column))
         }
     }
-    pub fn compile(&mut self) -> VLispResult<String> {
+    pub fn compile(&mut self) -> VinalResult<String> {
         let mut errors = vec![];
 
         for expr in self.input.clone() {

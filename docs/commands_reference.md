@@ -1,7 +1,7 @@
 Commands Reference
 ==================
 
-This file will contain all the Vim Lisp commands reference, it means a description, a syntax explanation and a status (implemented / unimplemented).
+This file will contain all the Vinal commands reference, it means a description, a syntax explanation and a status (implemented / unimplemented).
 
 map
 ---
