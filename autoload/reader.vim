@@ -1,6 +1,6 @@
 " vinel.vim - VINEL Is Not Emacs Lisp
 " File:       reader.vim
-" Maintainer: wafelack <wafelack@riseup.net>
+" Maintainer: Wafelack <wafelack@riseup.net>
 " Version:    0.1.0
 " License:    GPL-3.0-or-later
 
@@ -26,7 +26,10 @@ function! s:readString(raw)
         let l:content = l:content . l:raw[0]
         let l:raw = l:raw[1:]
     endwhile
-    return strlen(l:raw) == 0 ? 0 : [{ 'type' : g:vinel_string_t, 'content' : l:content }, l:raw[1:]]
+    if strlen(l:raw) == 0
+        echom "Unfinished string at `" . a:raw[0:strlen(l:content)] . "`."
+        return 0
+    return [{ 'type' : g:vinel_string_t, 'content' : l:content }, l:raw[1:]]
 endfunction
 
 function! s:readSymbol(raw)
@@ -50,10 +53,11 @@ function! s:readList(raw, inqq)
                 let l:raw = l:raw[1:]
                 let l:quoted = 0
             else
+                echom "Unexpected `,` outside a quasi quote at `" . a:raw[0:strlen(a:raw) - strlen(l:raw)] . "`."
                 return 0
             endif
         endif
-        let l:expr = s:readExpr(l:raw, a:inqq)
+        let l:expr = ReadExpr(l:raw, a:inqq)
         if type(l:expr) == v:t_number
             return 0
         elseif type(l:expr[0]) != v:t_list
@@ -61,7 +65,13 @@ function! s:readList(raw, inqq)
         endif
         let l:raw = l:expr[1]
     endwhile
-    return strlen(l:raw) == 0 ? 0 : [s:makeList(l:content), l:raw[1:]]
+
+    if strlen(l:raw) == 0
+        echom "Unclosed parenthese at `" . a:raw[0:strlen(a:raw) - strlen(l:raw)] . "`."
+        return 0
+    else
+        return len(l:content) == 0 ? [s:makeSymbol("nil"), l:raw[1:]] : [s:makeList(l:content), l:raw[1:]]
+    endif
 endfunction
 
 function! s:makeList(content)
@@ -72,15 +82,15 @@ function! s:makeSymbol(content)
     return { 'type' : g:vinel_symbol_t, 'content' : a:content }
 endfunction
 
-function! s:readExpr(raw, inqq)
+function! ReadExpr(raw, inqq)
     let l:first = a:raw[0]
     if l:first =~ '\d'
         return s:readNum(a:raw)
     elseif l:first == "'"
-        let l:expr = s:readExpr(a:raw[1:], 0)
+        let l:expr = ReadExpr(a:raw[1:], 0)
         return type(l:expr) == v:t_number ? 0 : [s:makeList(["quote", l:expr[0]]), l:expr[1]]
     elseif l:first == "`"
-        let l:expr = s:readExpr(a:raw[1:], 1)
+        let l:expr = ReadExpr(a:raw[1:], 1)
         return type(l:expr) == v:t_number ? 0 : [l:expr[0], l:expr[1]]
     elseif l:first == '"'
         return s:readString(a:raw)
@@ -97,7 +107,7 @@ function! reader#read(input)
     let l:exprs = []
     let l:input = a:input
     while strlen(l:input) > 0
-        let l:value = s:readExpr(l:input, 0)
+        let l:value = ReadExpr(l:input, 0)
         if type(l:value) == v:t_number
             return l:value
         endif
