@@ -7,14 +7,14 @@ It is written in pure VimL and therefore has direct access to Vim commands.
 
 === Roadmap
 
-- Reader
-- Variables, options and functions
-- Control flow
-- Macros
-- Mappings and abbreviations
-- Commands
-- Autocommands
-- Write a plugin for VINEL in VINEL
+* [*] Reader
+* [ ] Variables, options and functions
+* [ ] Control flow
+* [ ] Macros
+* [ ] Mappings and abbreviations
+* [ ] Commands
+* [ ] Autocommands
+* [ ] Write a plugin for VINEL in VINEL
 
 === Hacking
 

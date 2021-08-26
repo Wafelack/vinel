@@ -37,38 +37,57 @@ function! s:readSymbol(raw)
         let l:content = l:content . l:raw[0]
         let l:raw = l:raw[1:]
     endwhile
-    return [{ 'type' : g:vinel_symbol_t, 'content' : l:content }, l:raw]
+    return [s:makeSymbol(l:content), l:raw]
 endfunction
 
-function! s:readList(raw)
+function! s:readList(raw, inqq)
     let l:raw = a:raw[1:] " Consume opening parenthese
     let l:content = []
     while l:raw[0] != ')' && strlen(l:raw) != 0
-        let l:expr = s:readExpr(l:raw)
+        let l:quoted = 1
+        if l:raw[0] == ','
+            if a:inqq
+                let l:raw = l:raw[1:]
+                let l:quoted = 0
+            else
+                return 0
+            endif
+        endif
+        let l:expr = s:readExpr(l:raw, a:inqq)
         if type(l:expr) == v:t_number
             return 0
-        endif
-        if type(l:expr[0]) != v:t_list
-            call add(l:content, l:expr[0])
+        elseif type(l:expr[0]) != v:t_list
+            call add(l:content, a:inqq && l:quoted ? s:makeList([s:makeSymbol("quote"), l:expr[0]]) : l:expr[0])
         endif
         let l:raw = l:expr[1]
     endwhile
-    return strlen(l:raw) == 0 ? 0 : [{ 'type' : g:vinel_list_t, 'content' : l:content }, l:raw[1:]]
+    return strlen(l:raw) == 0 ? 0 : [s:makeList(l:content), l:raw[1:]]
 endfunction
 
-function! s:readExpr(raw)
+function! s:makeList(content)
+    return { 'type' : g:vinel_list_t, 'content' : a:content }
+endfunction
+
+function! s:makeSymbol(content)
+    return { 'type' : g:vinel_symbol_t, 'content' : a:content }
+endfunction
+
+function! s:readExpr(raw, inqq)
     let l:first = a:raw[0]
     if l:first =~ '\d'
         return s:readNum(a:raw)
     elseif l:first == "'"
-        let l:expr = s:readExpr(a:raw[1:])
-        return type(l:expr) == v:t_number ? 0 : [{ 'type' : g:vinel_list_t, 'content' : ["quote", l:expr[0]] }, l:expr[1]]
+        let l:expr = s:readExpr(a:raw[1:], 0)
+        return type(l:expr) == v:t_number ? 0 : [s:makeList(["quote", l:expr[0]]), l:expr[1]]
+    elseif l:first == "`"
+        let l:expr = s:readExpr(a:raw[1:], 1)
+        return type(l:expr) == v:t_number ? 0 : [l:expr[0], l:expr[1]]
     elseif l:first == '"'
         return s:readString(a:raw)
     elseif l:first == ' ' || l:first == "\t" || l:first == "\n" || l:first == "\r"
         return [[], a:raw[1:]]
     elseif l:first == '('
-        return s:readList(a:raw)
+        return s:readList(a:raw, a:inqq)
     else
         return s:readSymbol(a:raw)
     endif
@@ -78,7 +97,7 @@ function! reader#read(input)
     let l:exprs = []
     let l:input = a:input
     while strlen(l:input) > 0
-        let l:value = s:readExpr(l:input)
+        let l:value = s:readExpr(l:input, 0)
         if type(l:value) == v:t_number
             return l:value
         endif
