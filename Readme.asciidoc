@@ -1,0 +1,25 @@
+== VINEL
+
+VINEL Is Not Emacs Lisp
+
+VINEL is a dialect of Lisp with extensions for text editing, but it is not Emacs Lisp. +
+It is written in pure VimL and therefore has direct access to Vim commands.
+
+=== Roadmap
+
+- Reader
+- Variables, options and functions
+- Control flow
+- Macros
+- Mappings and abbreviations
+- Commands
+- Autocommands
+- Write a plugin for VINEL in VINEL
+
+=== Hacking
+
+Follow link:Hacking.asciidoc[]
+
+=== License
+
+Copyright (C) Wafelack 2021. This work is licensed under the GNU General Public License version 3.0 or any later version.
