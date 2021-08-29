@@ -4,6 +4,11 @@
 " Version:    0.1.0
 " License:    GPL-3.0-or-later
 
+if exists("g:vinel_reader_loaded")
+    finish
+endif
+let g:vinel_reader_loaded = 1
+
 let g:vinel_string_t = 0
 let g:vinel_symbol_t = 1
 let g:vinel_number_t = 2
@@ -29,7 +34,8 @@ function! s:readString(raw)
     if strlen(l:raw) == 0
         echom "Unfinished string at `" . a:raw[0:strlen(l:content)] . "`."
         return 0
-    return [{ 'type' : g:vinel_string_t, 'content' : l:content }, l:raw[1:]]
+        return [{ 'type' : g:vinel_string_t, 'content' : l:content }, l:raw[1:]]
+    endif
 endfunction
 
 function! s:readSymbol(raw)
@@ -57,7 +63,7 @@ function! s:readList(raw, inqq)
                 return 0
             endif
         endif
-        let l:expr = ReadExpr(l:raw, a:inqq)
+        let l:expr = reader#readExpr(l:raw, a:inqq)
         if type(l:expr) == v:t_number
             return 0
         elseif type(l:expr[0]) != v:t_list
@@ -82,15 +88,15 @@ function! s:makeSymbol(content)
     return { 'type' : g:vinel_symbol_t, 'content' : a:content }
 endfunction
 
-function! ReadExpr(raw, inqq)
+function! reader#readExpr(raw, inqq)
     let l:first = a:raw[0]
     if l:first =~ '\d'
         return s:readNum(a:raw)
     elseif l:first == "'"
-        let l:expr = ReadExpr(a:raw[1:], 0)
+        let l:expr = reader#readExpr(a:raw[1:], 0)
         return type(l:expr) == v:t_number ? 0 : [s:makeList(["quote", l:expr[0]]), l:expr[1]]
     elseif l:first == "`"
-        let l:expr = ReadExpr(a:raw[1:], 1)
+        let l:expr = reader#readExpr(a:raw[1:], 1)
         return type(l:expr) == v:t_number ? 0 : [l:expr[0], l:expr[1]]
     elseif l:first == '"'
         return s:readString(a:raw)
@@ -107,14 +113,20 @@ function! reader#read(input)
     let l:exprs = []
     let l:input = a:input
     while strlen(l:input) > 0
-        let l:value = ReadExpr(l:input, 0)
-        if type(l:value) == v:t_number
-            return l:value
+        if l:input[0] == ';'
+            while l:input[0] != "\n" && strlen(l:input) > 0
+                let l:input = l:input[1:]
+            endwhile
+        else
+            let l:value = reader#readExpr(l:input, 0)
+            if type(l:value) == v:t_number
+                return l:value
+            endif
+            if len(l:value[0]) != 0
+                let l:exprs = add(l:exprs, l:value[0])
+            endif
+            let l:input = l:value[1]
         endif
-        if len(l:value[0]) != 0
-            let l:exprs = add(l:exprs, l:value[0])
-        endif
-        let l:input = l:value[1]
     endwhile
     return l:exprs
 endfunction

@@ -1,7 +1,10 @@
 " vinel.vim - VINEL Is Not Emacs Lisp
-" File:       evaluator.vim
+" File:       vinel.vim
 " Maintainer: Wafelack <wafelack@riseup.net>
 " Version:    0.1.0
 " License:    GPL-3.0-or-later
 
-let g:vinel_func_t = 4
+if exists("g:vinel_loaded")
+    finish
+endif
+let g:vinel_loaded = 1
