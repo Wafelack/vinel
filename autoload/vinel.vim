@@ -4,7 +4,7 @@
 " Version:    0.1.0
 " License:    GPL-3.0-or-later
 
-if exists("g:vinel_loaded")
+if exists('g:vinel_loaded')
     finish
 endif
 let g:vinel_loaded = 1
