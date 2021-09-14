@@ -115,3 +115,21 @@ function! eval#evalExpr(expr, ctx)
         endif
     endif
 endfunction
+
+function! eval#evalWithCtx(exprs, ctx)
+    let l:ctx = a:ctx
+    let l:res = []
+    for expr in a:exprs
+        let l:tmp = eval#evalExpr(exprs, ctx)
+        if l:tmp == 0
+            return 0
+        endif
+        let l:res = l:tmp[0]
+        let l:ctx = l:tmp[1]
+    endfor
+    return [l:res, l:ctx]
+endfunction
+
+function! eval#eval(exprs)
+    return eval#evalWithCtx(exprs, [{}])
+endfunction
