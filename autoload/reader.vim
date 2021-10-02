@@ -85,7 +85,7 @@ function! s:makeList(content)
 endfunction
 
 function! s:makeSymbol(content)
-    return { 'type' : g:vinel_symbol_t, 'content' : a:content }
+    return { 'type' : g:vinel_symbol_t, 'content' : toupper(a:content) }
 endfunction
 
 function! reader#readExpr(raw, inqq)
