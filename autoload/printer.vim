@@ -19,11 +19,34 @@
 " You should have received a copy of the GNU General Public License
 " along with VINEL.  If not, see <https://www.gnu.org/licenses/>.
 " 
-" File:       vinel.vim
+" File:       printer.vim
 " Maintainer: Wafelack <wafelack@riseup.net>
 " Version:    0.1.0
 
-if exists('g:vinel_loaded')
+if exists('g:vinel_printer_loaded')
     finish
 endif
-let g:vinel_loaded = 1
+let g:vinel_printer_loaded = 1
+
+function! Show(expr)
+    let l:type = a:expr['type']
+    let l:content = a:expr['content']
+    
+    if l:type == g:vinel_string_t
+        return '"' . l:content . '"'
+    elseif l:type == g:vinel_symbol_t || l:type == g:vinel_symbol_t
+        return l:content
+    elseif l:type == g:vinel_list_t
+        let l:out = '( '
+        for expr in l:content
+            let l:out .= Show(expr) . ' '
+        endfor
+        return l:out . ')'
+    elseif l:type == g:vinel_func_t
+        return "#<function>"
+    endif
+endfunction
+
+function! Print(expr)
+    echom Show(a:expr)
+endfunction

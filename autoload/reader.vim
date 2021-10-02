@@ -1,8 +1,27 @@
+"
 " vinel.vim - VINEL Is Not Emacs Lisp
+" Copyright (C) 2021, Wafelack <wafelack@protonmail.com>
+" 
+" ------------------------------------------------------
+" 
+"    This file is part of VINEL.
+" 
+" VINEL is free software: you can redistribute it and/or modify
+" it under the terms of the GNU General Public License as published by
+" the Free Software Foundation, either version 3 of the License, or
+" (at your option) any later version.
+" 
+" VINEL is distributed in the hope that it will be useful,
+" but WITHOUT ANY WARRANTY; without even the implied warranty of
+" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+" GNU General Public License for more details.
+" 
+" You should have received a copy of the GNU General Public License
+" along with VINEL.  If not, see <https://www.gnu.org/licenses/>.
+"
 " File:       reader.vim
 " Maintainer: Wafelack <wafelack@riseup.net>
 " Version:    0.1.0
-" License:    GPL-3.0-or-later
 
 if exists('g:vinel_reader_loaded')
     finish
@@ -92,13 +111,13 @@ function! reader#readExpr(raw, inqq)
     let l:first = a:raw[0]
     if l:first =~ '\d'
         return s:readNum(a:raw)
-    elseif l:first == '"'
+    elseif l:first == "'"
         let l:expr = reader#readExpr(a:raw[1:], 0)
         return type(l:expr) == v:t_number ? 0 : [s:makeList(['quote', l:expr[0]]), l:expr[1]]
     elseif l:first == '`'
         let l:expr = reader#readExpr(a:raw[1:], 1)
         return type(l:expr) == v:t_number ? 0 : [l:expr[0], l:expr[1]]
-    elseif l:first == "'"
+    elseif l:first == '"'
         return s:readString(a:raw)
     elseif l:first == ' ' || l:first == '\t' || l:first == '\n' || l:first == '\r'
         return [[], a:raw[1:]]
