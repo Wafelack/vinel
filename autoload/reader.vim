@@ -71,6 +71,9 @@ endfunction
 function! s:readList(raw, inqq)
     let l:raw = a:raw[1:] " Consume opening parenthese
     let l:content = []
+    if a:inqq
+        let l:content = [s:makeSymbol('list')]
+    endif
     while l:raw[0] != ')' && strlen(l:raw) != 0
         let l:quoted = 1
         if l:raw[0] == ','
