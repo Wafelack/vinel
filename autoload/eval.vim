@@ -90,6 +90,18 @@ function! eval#evalExpr(expr, ctx)
                     echom 'Usage: (PRINT E:ANY)'
                     return 0
                 endif
+            elseif l:name == 'LOOP'
+                let l:ctx = a:ctx
+                while 1
+                    for expr in l:args
+                        let l:ne = eval#evalExpr(expr, l:ctx)
+                        if type(l:ne) == v:t_number
+                            return 0
+                        else
+                            let l:ctx = l:ne[1]
+                        endif
+                    endfor
+                endwhile
             elseif l:name == 'EVAL'
                 if len(l:args) == 1
                     let l:expr = eval#evalExpr(l:args[0], a:ctx)
