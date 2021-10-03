@@ -46,7 +46,7 @@ endfunction
 function! s:evalQuote(argv, ctx)
     if len(a:argv) != 1
         s:invalidArgc('QUOTE', 1, a:argv)
-        echom 'Usage: (QUOTE VALUE(Any)).'
+        echom 'Usage: (QUOTE VALUE:ANY).'
         return 0
     endif
     return [a:argv[0], a:ctx]
@@ -58,23 +58,49 @@ function! eval#evalExpr(expr, ctx)
     if l:type == g:vinel_string_t || l:type == g:vinel_number_t
         return [a:expr, a:ctx]
     elseif l:type == g:vinel_symbol_t
-        let s:value = s:findVar(l:content, a:ctx)
-        if type(s:value) == v:t_number
+        let l:value = s:findVar(l:content, a:ctx)
+        if type(l:value) == v:t_number
             echom 'Found reference to an unbound variable: `' . l:content . '`.'
             return 0
         else
-            return s:value
+            return [l:value, a:ctx]
         endif
     elseif l:type == g:vinel_list_t
         if l:content[0]['type'] == g:vinel_symbol_t
             let l:name = l:content[0]['content']
             let l:args = l:content[1:]
+
             if l:name == 'DEFVAR'
                 return vars#evalDefvar(l:args, a:ctx)
             elseif l:name == 'QUOTE'
                 return s:evalQuote(l:args, a:ctx)
-            elseif l:name == 'QUOTE'
+            elseif l:name == 'SETV'
                 return vars#evalSetv(l:args, a:ctx)
+            elseif l:name == 'READ'
+                let l:raw = ''
+                if len(l:args) == 0
+                    let l:raw = input('')
+                elseif len(l:args) == 1
+                    let l:type = l:args[0]['type']
+                    if l:type == g:vinel_string_t
+                        let l:raw = l:args[0]['content']
+                    else
+                        echom 'Expected a string (e.g. `"Hello"`), found a ' . g:vinel_type_names[l:type]
+                        echom 'Usage: (READ RAW:STRING?).'
+                        return 0
+                    endif
+                else
+                    call eval#invalidArgc('READ', 1, l:args)
+                    echom 'Usage: (READ RAW:STRING?).'
+                    return 0
+                endif
+
+                let l:e = reader#readExpr(l:raw, 0)
+                if type(l:e) == v:t_number
+                    return 0
+                else
+                    return [l:e[0], a:ctx]
+                endif
             else
                 let l:fun = eval#evalExpr(l:content[0], a:ctx)
                 echom l:fun
@@ -86,12 +112,12 @@ function! eval#evalExpr(expr, ctx)
     endif
 endfunction
 
-function! eval#evalWithCtx(exprs, ctx)
+function! eval#evalWithCtx(exprs, ctx) abort
     let l:ctx = a:ctx
     let l:res = []
     for expr in a:exprs
-        let l:tmp = eval#evalExpr(exprs, ctx)
-        if l:tmp == 0
+        let l:tmp = eval#evalExpr(expr, ctx)
+        if type(l:tmp) == v:t_number
             return 0
         endif
         let l:res = l:tmp[0]
@@ -100,6 +126,6 @@ function! eval#evalWithCtx(exprs, ctx)
     return [l:res, l:ctx]
 endfunction
 
-function! eval#eval(exprs)
-    return eval#evalWithCtx(exprs, [{}])
+function! eval#eval(exprs) abort
+    return eval#evalWithCtx(a:exprs, [{}])
 endfunction

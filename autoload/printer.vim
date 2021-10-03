@@ -34,7 +34,7 @@ function! Show(expr)
     
     if l:type == g:vinel_string_t
         return '"' . l:content . '"'
-    elseif l:type == g:vinel_symbol_t || l:type == g:vinel_symbol_t
+    elseif l:type == g:vinel_symbol_t || l:type == g:vinel_number_t
         return l:content
     elseif l:type == g:vinel_list_t
         let l:out = '( '

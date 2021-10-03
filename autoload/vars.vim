@@ -31,13 +31,13 @@ let g:vinel_vars_loaded = 1
 function! vars#evalDefvar(argv, ctx)
     if len(a:argv) != 2
         eval#invalidArgc('DEFVAR', 2, a:argv)
-        echom 'Usage: (DEFVAR NAME(Symbol) VALUE(Any)).'
+        echom 'Usage: (DEFVAR NAME:SYMBOL VALUE:ANY).'
         return 0
     endif
     let l:name_type = a:argv[0]['type']
     if l:name_type != g:vinel_symbol_t
-        echom 'Expected a symbol (e.g. `foo`) found a ' . g:vinel_type_names[l:name_type] . '.'
-        echom 'Usage: (DEFVAR NAME(Symbol) VALUE(Any)).'
+        echom 'Expected a symbol (e.g. `FOO`), found a ' . g:vinel_type_names[l:name_type] . '.'
+        echom 'Usage: (DEFVAR NAME:SYMBOL VALUE:ANY).'
         return 0
     endif
     let l:ctx = a:ctx
@@ -54,13 +54,13 @@ endfunction
 function! vars#evalSetv(argv, ctx)
     if len(a:argv) != 2
         eval#invalidArgc("SETV", 2, a:argv)
-        echom 'Usage: (SETV NAME(Symbol) VALUE(Any)).'
+        echom 'Usage: (SETV NAME:SYMBOL VALUE:ANY).'
         return 0
     endif
     let l:name_type = a:argv[0]['type']
     if l:name_type != g:vinel_symbol_t
-        echom 'Expected a symbol (e.g. `foo`) found a ' . g:vinel_type_names[l:name_type] . '.'
-        echom 'Usage: (SETV NAME(Symbol) VALUE(Any)).'
+        echom 'Expected a symbol (e.g. `foo`), found a ' . g:vinel_type_names[l:name_type] . '.'
+        echom 'Usage: (SETV NAME:SYMBOL VALUE:ANY).'
         return 0
     endif
     let l:ctx = a:ctx

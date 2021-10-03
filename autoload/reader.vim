@@ -53,6 +53,7 @@ function! s:readString(raw)
     if strlen(l:raw) == 0
         echom 'Unfinished string at `' . a:raw[0:strlen(l:content)] . '`.'
         return 0
+    else
         return [{ 'type' : g:vinel_string_t, 'content' : l:content }, l:raw[1:]]
     endif
 endfunction
@@ -60,7 +61,7 @@ endfunction
 function! s:readSymbol(raw)
     let l:content = ''
     let l:raw = a:raw
-    let l:terminating = [' ', '(', "'", ')', '\r', '\n', '\t', '`', ',', "'"]
+    let l:terminating = [' ', '(', "'", ')', '\r', '\n', '\t', '`', ',', '"']
     while index(l:terminating, l:raw[0]) == -1 && strlen(l:raw) != 0
         let l:content = l:content . l:raw[0]
         let l:raw = l:raw[1:]
@@ -116,7 +117,7 @@ function! reader#readExpr(raw, inqq)
         return s:readNum(a:raw)
     elseif l:first == "'"
         let l:expr = reader#readExpr(a:raw[1:], 0)
-        return type(l:expr) == v:t_number ? 0 : [s:makeList(['quote', l:expr[0]]), l:expr[1]]
+        return type(l:expr) == v:t_number ? 0 : [s:makeList([s:makeSymbol('quote'), l:expr[0]]), l:expr[1]]
     elseif l:first == '`'
         let l:expr = reader#readExpr(a:raw[1:], 1)
         return type(l:expr) == v:t_number ? 0 : [l:expr[0], l:expr[1]]
