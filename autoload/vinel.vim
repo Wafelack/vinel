@@ -27,3 +27,36 @@ if exists('g:vinel_loaded')
     finish
 endif
 let g:vinel_loaded = 1
+
+let g:vinel_type_names = ["STRING", "SYMBOL", "NUMBER", "LIST", "FUNCTION"]
+
+function! FullEvalLine(s, ctx) abort
+    echom " "
+    let l:exprs = reader#read(a:s)
+    if type(l:exprs) != v:t_number
+        let l:r = eval#evalWithCtx(l:exprs, a:ctx)
+        if type(l:r) != v:t_number
+            echom "=> " . Show(l:r[0])
+            return l:r[1]
+        endif
+    endif
+    return 0
+endfunction
+
+function! Repl() abort
+    let l:ctx = [{}]
+    let l:ln = 0
+    while 1
+        let l:ln += 1
+        let l:s = input('VINEL-USER:' . l:ln . '> ')
+        if len(l:s) != 0
+            let l:out = FullEvalLine(l:s, l:ctx)
+            if type(l:out) != v:t_number
+                let l:ctx = l:out
+            endif
+        endif
+    endwhile
+endfunction
+
+nnoremap <leader>x :call FullEvalLine(input('M-x '), [{}])<CR>
+nnoremap <leader>r :call Repl()<CR>
