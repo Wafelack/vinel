@@ -66,14 +66,14 @@ function! s:readSymbol(raw)
         let l:content = l:content . l:raw[0]
         let l:raw = l:raw[1:]
     endwhile
-    return [s:makeSymbol(l:content), l:raw]
+    return [reader#makeSymbol(l:content), l:raw]
 endfunction
 
 function! s:readList(raw, inqq)
     let l:raw = a:raw[1:] " Consume opening parenthese
     let l:content = []
     if a:inqq
-        let l:content = [s:makeSymbol('list')]
+        let l:content = [reader#makeSymbol('list')]
     endif
     while l:raw[0] != ')' && strlen(l:raw) != 0
         let l:quoted = 1
@@ -90,7 +90,7 @@ function! s:readList(raw, inqq)
         if type(l:expr) == v:t_number
             return 0
         elseif type(l:expr[0]) != v:t_list
-            call add(l:content, a:inqq && l:quoted ? s:makeList([s:makeSymbol('quote'), l:expr[0]]) : l:expr[0])
+            call add(l:content, a:inqq && l:quoted ? s:makeList([reader#makeSymbol('quote'), l:expr[0]]) : l:expr[0])
         endif
         let l:raw = l:expr[1]
     endwhile
@@ -99,7 +99,7 @@ function! s:readList(raw, inqq)
         echom 'Unclosed parenthese at `' . a:raw[0:strlen(a:raw) - strlen(l:raw)] . '`.'
         return 0
     else
-        return len(l:content) == 0 ? [s:makeSymbol('nil'), l:raw[1:]] : [s:makeList(l:content), l:raw[1:]]
+        return len(l:content) == 0 ? [reader#makeSymbol('nil'), l:raw[1:]] : [s:makeList(l:content), l:raw[1:]]
     endif
 endfunction
 
@@ -107,7 +107,7 @@ function! s:makeList(content)
     return { 'type' : g:vinel_list_t, 'content' : a:content }
 endfunction
 
-function! s:makeSymbol(content)
+function! reader#makeSymbol(content)
     return { 'type' : g:vinel_symbol_t, 'content' : toupper(a:content) }
 endfunction
 
@@ -117,7 +117,7 @@ function! reader#readExpr(raw, inqq)
         return s:readNum(a:raw)
     elseif l:first == "'"
         let l:expr = reader#readExpr(a:raw[1:], 0)
-        return type(l:expr) == v:t_number ? 0 : [s:makeList([s:makeSymbol('quote'), l:expr[0]]), l:expr[1]]
+        return type(l:expr) == v:t_number ? 0 : [s:makeList([reader#makeSymbol('quote'), l:expr[0]]), l:expr[1]]
     elseif l:first == '`'
         let l:expr = reader#readExpr(a:raw[1:], 1)
         return type(l:expr) == v:t_number ? 0 : [l:expr[0], l:expr[1]]

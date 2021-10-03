@@ -76,6 +76,20 @@ function! eval#evalExpr(expr, ctx)
                 return s:evalQuote(l:args, a:ctx)
             elseif l:name == 'SETV'
                 return vars#evalSetv(l:args, a:ctx)
+            elseif l:name == 'PRINT'
+                if len(l:args) == 1
+                    let l:expr = eval#evalExpr(l:args[0], a:ctx)
+                    if type(l:expr) == v:t_number
+                        return 0
+                    else
+                        call Print(l:expr[0])
+                        return l:expr
+                    endif
+                else
+                    call eval#invalidArgc('PRINT', 1, l:args)
+                    echom 'Usage: (PRINT E:ANY)'
+                    return 0
+                endif
             elseif l:name == 'READ'
                 let l:raw = ''
                 if len(l:args) == 0
