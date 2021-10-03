@@ -90,6 +90,18 @@ function! eval#evalExpr(expr, ctx)
                     echom 'Usage: (PRINT E:ANY)'
                     return 0
                 endif
+            elseif l:name == 'EVAL'
+                if len(l:args) == 1
+                    let l:expr = eval#evalExpr(l:args[0], a:ctx)
+                    if type(l:expr) == v:t_number
+                        return 0
+                    else
+                        return eval#evalExpr(l:expr[0], l:expr[1])
+                    endif
+                else
+                    call eval#invalidArgc('EVAL', 1, l:args)
+                    echo 'Usage: (EVAL E:ANY)'
+                endif
             elseif l:name == 'READ'
                 let l:raw = ''
                 if len(l:args) == 0
